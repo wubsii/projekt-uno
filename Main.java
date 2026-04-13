@@ -5,7 +5,7 @@ public class Main {
         Spiel uno = new Spiel();
 
         System.out.println("TEST");
-        System.out.println("TEST3");
+        System.out.println("TEST33");
 
     }
 }
