@@ -4,5 +4,8 @@ public class Main {
     public static void main(String[] args) {
         Spiel uno = new Spiel();
 
+        System.out.println("TEST");
+        System.out.println("TEST");
+
     }
 }
