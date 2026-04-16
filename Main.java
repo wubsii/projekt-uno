@@ -1,12 +1,18 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.ArrayList;
+
 public class Main {
-    public static void main(String[] args) {
+    static void main() {
         Spiel uno = new Spiel();
 
-        System.out.println("TEST");
-        System.out.println("TEST33");
-        System.out.println("TEST33");
+        uno.shuffle();
 
+        // Wir erstellen eine ArrayListe mit dem Wert CARD - und ziehen dann 7 Karten vom Stapel
+        ArrayList<Card> hand = uno.zieheKarten(7);
+
+        // Ausgabe der Karten die in meiner Hand sind
+        System.out.println("Deine Karten sind:");
+        for (Card c : hand) {
+            c.print();
+        }
     }
 }
