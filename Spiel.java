@@ -1,19 +1,25 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class Spiel {
-    private ArrayList<Card> deck = new ArrayList<>();
+//    private ArrayList<Card> deck = new ArrayList<>();
 
     // Constructor vom Spiel wo wir die Daten farben und wert inunsere ArrayList namens deck hinzufügen
-    public Spiel() {
-        String[] farben = {"Rot", "Gelb", "Grün", "Blau"};
-        String[] werte = {"0","1","2","3","4","5","6","7","8","9","Skip","Reverse","+2"};
-
-        for (String f : farben) {
-            for (String w : werte) {
-                deck.add(new Card(f, w));
-            }
+//    public Spiel() {
+//        String[] farben = {"Rot", "Gelb", "Grün", "Blau"};
+//        String[] werte = {"0","1","2","3","4","5","6","7","8","9","Skip","Reverse","+2"};
+//
+//        for (String f : farben) {
+//            for (String w : werte) {
+//                deck.add(new Card(f, w));
+//            }
+//        }
+    List<Card> deck = Card.makeDeck();
+    public void displayCards() {
+        for (Card i : deck) {
+            System.out.println(i);
         }
     }
 
@@ -36,12 +42,12 @@ public class Spiel {
         }
     }
 
-    // Erstellt zum Testen der Ausgabe, ob Karten richtig gemischt werden
-    public void alleKartenAnzeigen() {
-        for (Card c : deck) {
-            c.print();
-        }
-    }
+//    // Erstellt zum Testen der Ausgabe, ob Karten richtig gemischt werden
+//    public void alleKartenAnzeigen() {
+//        for (Card c : deck) {
+//            c.print();
+//        }
+//    }
 
     public ArrayList<Card> zieheKarten(int anzahl) {
         // Erstellen unserer Hand, di enoch eine Karten hat
