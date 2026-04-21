@@ -16,7 +16,7 @@ public class Spiel {
 //                deck.add(new Card(f, w));
 //            }
 //        }
-    List<Card> deck = Card.makeDeck();
+    List<Card> deck = Deck.makeDeck();
     public void displayCards() {
         for (Card i : deck) {
             System.out.println(i);
