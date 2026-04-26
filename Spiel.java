@@ -50,7 +50,7 @@ public class Spiel {
 //    }
 
     public ArrayList<Card> zieheKarten(int anzahl) {
-        // Erstellen unserer Hand, di enoch eine Karten hat
+        // Erstellen unserer Hand, die noch eine Karten hat
         ArrayList<Card> hand = new ArrayList<>();
 
         // Schleife die 7 mal durchgeht, damit wir unsere Karten in die Hand bekommen
