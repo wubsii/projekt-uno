@@ -37,5 +37,8 @@ public class Main {
 
         // Karten anzeigen (nur Demo)
         spieler.playerHand();
+
+        //Menü-Ausgabe (nur Demo)
+        Menu.runMenu();
     }
 }

@@ -26,7 +26,7 @@ public class Spiel {
     public void shuffle() {
         Random rand = new Random();
 
-        // Lenge der ArrayListe -1
+        // Länge der ArrayListe -1
         for (int i = deck.size() - 1; i > 0; i--) {
 
             int randIndex = rand.nextInt(i + 1);
