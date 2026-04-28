@@ -2,10 +2,10 @@ import java.util.Scanner;
 
 public class Menu {
 static Scanner scanner = new Scanner(System.in);
-private static String RESET = "\u001B[0m";
-private static String YELLOW = "\u001B[33m";
+private static final String RESET = "\u001B[0m";
+private static final String YELLOW = "\u001B[33m";
 
-public static int runMenu() {
+public static void runMenu() {
 while(true) {
         showMenu();
         System.out.println(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
@@ -41,6 +41,7 @@ public static void showMenu() {
 
 public static void showHelp() {
             System.out.printf(YELLOW + """
+                WIP
                 """ + RESET);
 
     }
