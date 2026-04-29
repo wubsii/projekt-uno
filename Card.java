@@ -24,6 +24,22 @@ public class Card {
         color = c;
     }
 
+    public static List<Card> makeDeck() {
+        List<Card> deck = new ArrayList<Card>();
+        for (Color c : Color.values()) {
+            for (Value v : Value.values()) {
+                deck.add(new Card(v, c));
+            }
+        }
+        return deck;
+    }
+
+    // Override für die ausgabe der Karten
+    @Override
+    public String toString() {
+        return color + " " + value;
+    }
+
 //    public static List<Card> makeDeck() {
 //        List<Card> deck = new ArrayList<Card>();
 //        for (Color c : Color.values()) { // alle farben loopen

@@ -5,7 +5,14 @@ static Scanner scanner = new Scanner(System.in);
 private static final String RESET = "\u001B[0m";
 private static final String YELLOW = "\u001B[33m";
 
+    private static Spieler spieler;
+
+    public static void setSpieler(Spieler s) {
+        spieler = s;
+    }
+
 public static void runMenu() {
+    Menu.setSpieler(spieler);
 while(true) {
         showMenu();
         System.out.println(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
@@ -14,6 +21,14 @@ while(true) {
         switch(input){
             case 1:
                 System.out.println("WIP");
+                Card topCard = spieler.getStartercard();
+                // Spieler macht Zug
+                Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
+
+                if (played != null) {
+                    topCard = played;
+                    System.out.println("Neue Karte oben: " + topCard);
+                }
                 break;
             case 2:
                 System.out.println("WIP");
