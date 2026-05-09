@@ -17,6 +17,11 @@ public class Spiel {
 //            }
 //        }
     List<Card> deck = Deck.makeDeck();
+    DiscardPile discardPile;
+
+    public Spiel(DiscardPile discardPile) {
+        this.discardPile = discardPile;
+    }
 
     public void displayCards() {
         for (Card i : deck) {
@@ -50,7 +55,8 @@ public class Spiel {
 //        }
 //    }
 
-    public ArrayList<Card> zieheKarten(int anzahl) {
+    public ArrayList<Card> dealInitialHand(int anzahl) {
+
         // Erstellen unserer Hand, die noch eine Karten hat
         ArrayList<Card> hand = new ArrayList<>();
 
@@ -62,6 +68,19 @@ public class Spiel {
 
         // Zurückgeben der ArrayListe Hand, damit wir die Karten zeigen können
         return hand;
+    }
+
+    // NOCH NICHT FERTIG: Methode, wo Karten im Laufe des Spiels gezogen werden
+    public void drawCards(int amount) {
+        // Karten vom Ablegestapel mischen und hinzufügen, wenn Deck weniger als 4 Karten hat
+        if (deck.size() < 4) {
+
+            List<Card> recycled = discardPile.takeAllExceptTop();
+
+            deck.addAll(recycled);
+
+            shuffle();
+        }
     }
 }
 

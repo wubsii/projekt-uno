@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -6,8 +7,13 @@ public class Spieler {
 
     Scanner input = new Scanner(System.in);
     String name;
-    Spiel uno = new Spiel();
+    private DiscardPile discardPile;
+    Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
+
+    public Spieler(DiscardPile discardPile) {
+        this.discardPile = discardPile;
+    }
 
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
@@ -49,7 +55,7 @@ public class Spieler {
 
     public ArrayList<Card> playerHand() {
         uno.shuffle();
-        hand = uno.zieheKarten(7);
+        hand = uno.dealInitialHand(7);
 
         System.out.println("Du (" + name + ") hast folgende Karten:");
         for (Card c : hand) {
@@ -104,6 +110,7 @@ public class Spieler {
         if (isValidMove(selectedCard, topCard)) {
             hand.remove(choice - 1);
             System.out.println("Du hast gespielt: " + selectedCard);
+            discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
             return selectedCard;
         } else {
             System.out.println("Diese Karte darfst du nicht spielen!");
@@ -135,7 +142,7 @@ public class Spieler {
     public Card getStartercard() {
         // Startkarte vom Deck
         uno.shuffle();
-        Card topCard = uno.zieheKarten(1).get(0);
+        Card topCard = uno.dealInitialHand(1).get(0);
         System.out.println("Startkarte ist: " + topCard);
         return topCard;
     }

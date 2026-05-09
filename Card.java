@@ -40,39 +40,35 @@ public class Card {
         return color + " " + value;
     }
 
-//    public static List<Card> makeDeck() {
-//        List<Card> deck = new ArrayList<Card>();
-//        for (Color c : Color.values()) { // alle farben loopen
-//            // schwarze erstellen
-//            if (c == Color.BLACK) {
-//                for (int i = 0; i < 4; i++) {
-//                    deck.add(new Card(Value.COLOR_CHANGE, c));
-//                    deck.add(new Card(Value.PLUS_FOUR, c));
-//                }
-//            }
-//            // alle die 1 mal vorkommen erstellen
-//            deck.add(new Card(Value.ZERO, c));
+
+    //toString-Methode für Ausgabe von buntem Text für die Karten:
+
+//    @Override
+//    public String toString() {
+//        String ansiColor = "";
 //
-//            for (int i = 0; i < 2 ; i++) {
-//                deck.add(new Card(Value.SKIP, c));
-//                deck.add(new Card(Value.REVERSE, c));
-//                deck.add(new Card(Value.PLUS_TWO, c));
-//
-//                deck.add(new Card(Value.ONE, c));
-//                deck.add(new Card(Value.TWO, c));
-//                deck.add(new Card(Value.THREE, c));
-//                deck.add(new Card(Value.FOUR, c));
-//                deck.add(new Card(Value.FIVE, c));
-//                deck.add(new Card(Value.SIX, c));
-//                deck.add(new Card(Value.SEVEN, c));
-//                deck.add(new Card(Value.EIGHT, c));
-//                deck.add(new Card(Value.NINE, c));
-//            }
+//        switch (color) {
+//            case RED:
+//                ansiColor = "\u001B[31m";
+//                break;
+//            case BLUE:
+//                ansiColor = "\u001B[34m";
+//                break;
+//            case GREEN:
+//                ansiColor = "\u001B[32m";
+//                break;
+//            case YELLOW:
+//                ansiColor = "\u001B[33m";
+//                break;
+//            case BLACK:
+//                ansiColor = "\u001B[37m"; // or keep default
+//                break;
 //        }
 //
-//        // schwarze karten erstellen
+//        String reset = "\u001B[0m";
 //
-//        return deck;
+//        return ansiColor + "[" + color + " " + value + "]" + reset;
 //    }
+
 
 }

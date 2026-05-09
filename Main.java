@@ -1,8 +1,9 @@
 public class Main {
     public static void main(String[] args) {
 
-        Spieler spieler = new Spieler();
-        Spiel uno = new Spiel();
+        DiscardPile discardPile = new DiscardPile();
+        Spieler spieler = new Spieler(discardPile);
+        Spiel uno = new Spiel(discardPile);
 
         String[] playerName = new String[4];
         uno.shuffle();
@@ -19,7 +20,7 @@ public class Main {
         String[] neueReihenfolge = spieler.showOrder(playerName, start);
 
         // Karten ziehen
-        spieler.setHand(uno.zieheKarten(7));
+        spieler.setHand(uno.dealInitialHand(7));
 
         // Karten anzeigen lassen / Spiel starten
         spieler.showCards(neueReihenfolge);
