@@ -1,32 +1,43 @@
 public class Main {
+
     public static void main(String[] args) {
 
         DiscardPile discardPile = new DiscardPile();
-        Spieler spieler = new Spieler(discardPile);
         Spiel uno = new Spiel(discardPile);
 
-        String[] playerName = new String[4];
         uno.shuffle();
+        uno.getStartercard();
 
-        // Namen eingeben
+        Spieler[] spielerListe = new Spieler[4];
+
+        // Spieler erstellen
         for (int i = 0; i < 4; i++) {
-            playerName[i] = spieler.gettingName();
+
+            spielerListe[i] = new Spieler(discardPile);
+
+            String name = spielerListe[i].gettingName();
+            spielerListe[i].setName(name);
         }
 
-        // Startspieler bestimmen
-        int start = spieler.randomizePlayer();
+        // Karten einmal verteilen
+        for (int i = 0; i < 4; i++) {
+            spielerListe[i].setHand(
+                    uno.dealInitialHand(7)
+            );
+        }
 
-        // Reihenfolge anzeigen
-        String[] neueReihenfolge = spieler.showOrder(playerName, start);
+        // Startspieler
+        int start = spielerListe[0].randomizePlayer();
 
-        // Karten ziehen
-        spieler.setHand(uno.dealInitialHand(7));
+        while (true) {
 
-        // Karten anzeigen lassen / Spiel starten
-        spieler.showCards(neueReihenfolge);
+            Spieler aktuellerSpieler = spielerListe[(start++) % 4];
 
-        // Menü starten
-        Menu.setSpieler(spieler);
-        Menu.runMenu();
+            Menu.setSpieler(aktuellerSpieler);
+            Menu.setSpiel(uno);
+
+            //Menu.showMenu();
+            Menu.runTurn();
+        }
     }
 }

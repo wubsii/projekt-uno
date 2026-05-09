@@ -19,6 +19,14 @@ public class Spieler {
         this.hand = hand;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public String gettingName() {
         // Eingabe wie die Leute heißen, die das mit spielen
         System.out.print("Wie heißt der Spieler? ");
@@ -39,10 +47,10 @@ public class Spieler {
             neueReihenfolge[i] = playerName[(start + i) % 4];
         }
         // Ausgabe Reihenfolge
-        System.out.println("Reihenfolge: ");
-        for (String name : neueReihenfolge) {
-            System.out.println(name);
-        }
+//        System.out.println("Reihenfolge: ");
+//        for (String name : neueReihenfolge) {
+//            System.out.println(name);
+//        }
         return neueReihenfolge;
     }
 
@@ -65,18 +73,18 @@ public class Spieler {
         return hand;
     }
 
-    // MUSS SICH NOCHMAL ANGESCHAUT WERDEN
-    public void showCards(String[] neueReihenfolge) {
-        // Abfrage ob der Spieler die Karten gezeigt werden möchte
-        for (String name : neueReihenfolge) {
-            // !FEHLER! Wegen der for each schleife werden alle namen ausgegeben
-        }
-        System.out.println(name+ " ist jetzt an der Reihe");
-        System.out.println("Bitte um eingabe das nur du die Karten siehst (j/n): ");
+
+    public void showCards() {
+        System.out.println(name + " ist jetzt an der Reihe");
+        System.out.println("Bitte bestätigen (j/n), damit nur du die Karten siehst: ");
+
         char showMe = input.next().charAt(0);
 
         if (showMe == 'j' || showMe == 'J') {
-            hand = playerHand();
+            System.out.println("Du (" + name + ") hast folgende Karten:");
+            for (Card c : hand) {
+                c.print();
+            }
         } else {
             System.out.println("Bitte bestätige mit 'j', um fortzufahren.");
         }

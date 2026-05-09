@@ -17,6 +17,7 @@ public class Spiel {
 //            }
 //        }
     List<Card> deck = Deck.makeDeck();
+    private Card topCard;
     DiscardPile discardPile;
 
     public Spiel(DiscardPile discardPile) {
@@ -55,6 +56,7 @@ public class Spiel {
 //        }
 //    }
 
+
     public ArrayList<Card> dealInitialHand(int anzahl) {
 
         // Erstellen unserer Hand, die noch eine Karten hat
@@ -82,6 +84,26 @@ public class Spiel {
             shuffle();
         }
     }
+
+    public void setTopCard(Card card) {
+        this.topCard = card;
+    }
+
+    public Card getTopCard() {
+        return topCard;
+    }
+
+    public Card getStartercard() {
+        do {
+            shuffle(); // mischt DEIN aktuelles Deck
+            topCard = dealInitialHand(1).get(0);
+        } while (topCard.color == Color.BLACK);
+
+        System.out.println("Startkarte ist: " + topCard);
+        return topCard;
+    }
+
+
 }
 
 
