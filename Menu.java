@@ -89,7 +89,6 @@ public class Menu {
         System.out.println("Top-Karte: " + topCard);
 
         // Karten anzeigen
-        System.out.println("Deine Karten:");
         spieler.playerHand();
 
         // Menü anzeigen

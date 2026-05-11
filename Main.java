@@ -6,7 +6,7 @@ public class Main {
         Spiel uno = new Spiel(discardPile);
 
         uno.shuffle();
-        uno.getStartercard();
+
 
         Spieler[] spielerListe = new Spieler[4];
 
@@ -32,7 +32,7 @@ public class Main {
         while (true) {
 
             Spieler aktuellerSpieler = spielerListe[(start++) % 4];
-
+            uno.getStartercard();
             Menu.setSpieler(aktuellerSpieler);
             Menu.setSpiel(uno);
 
