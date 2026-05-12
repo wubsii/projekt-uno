@@ -32,12 +32,12 @@ public class Main {
         while (true) {
 
             Spieler aktuellerSpieler = spielerListe[(start++) % 4];
-            uno.getStartercard();
+            Card topCard = uno.getStartercard();
             Menu.setSpieler(aktuellerSpieler);
             Menu.setSpiel(uno);
 
             //Menu.showMenu();
-            Menu.runTurn();
+            Menu.runMenu();
         }
     }
 }

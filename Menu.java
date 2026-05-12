@@ -19,18 +19,22 @@ public class Menu {
 
     public static void runMenu() {
         Menu.setSpieler(spieler);
+        Card topCard = uno.getTopCard();
+
+        // Karten anzeigen
+        spieler.showCards();
         while (true) {
             showMenu();
-            System.out.println(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
+            System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
             int input = scanner.nextInt();
 
             switch (input) {
                 case 1:
-                    Card topCard = uno.getTopCard();
+                    // Karte spielen
                     Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
-
                     if (played != null) {
                         uno.setTopCard(played);
+                        System.out.println("Neue Top-Karte: " + played);
                     }
                     break;
                 case 2:
@@ -76,64 +80,6 @@ public class Menu {
                 System.out.println(YELLOW + "Ungültige Eingabe, bitte j/n eingeben: " + RESET);
                 continue;
             }
-        }
-    }
-
-
-    public static void runTurn() {
-
-        System.out.println("\n--- Nächster Zug ---");
-        System.out.println(spieler.getName() + " ist dran");
-
-        Card topCard = uno.getTopCard();
-        System.out.println("Top-Karte: " + topCard);
-
-        // Karten anzeigen
-        spieler.playerHand();
-
-        // Menü anzeigen
-        showMenu();
-
-        System.out.print("Wähle eine Option: ");
-        int input = scanner.nextInt();
-
-        switch (input) {
-
-            case 1:
-
-                // Karte spielen
-                Card played =
-                        spieler.whichCardWouldYouLikeToPlay(topCard);
-
-                if (played != null) {
-
-                    uno.setTopCard(played);
-
-                    System.out.println(
-                            "Neue Top-Karte: " + played
-                    );
-                }
-
-                break;
-
-            case 2:
-                System.out.println("Punktestand WIP");
-                break;
-
-            case 3:
-                showHelp();
-                break;
-
-            case 4:
-
-                if (isExit()) {
-                    System.exit(0);
-                }
-
-                break;
-
-            default:
-                System.out.println("Ungültige Eingabe");
         }
     }
 
