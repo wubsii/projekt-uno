@@ -37,8 +37,7 @@ public class Main {
             Menu.setSpieler(aktuellerSpieler);
             Menu.setSpiel(uno);
 
-            //Menu.showMenu();
-            Menu.runTurn();
+            Menu.runMenu();
         }
     }
 }

@@ -146,11 +146,14 @@ public class Spieler {
         return false;
     }
 
-    // DARF KEINE BLACK CARD SEIN
+    // DARF KEINE BLACK +4 CARD SEIN
     public Card getStartercard() {
+        Card topCard;
         // Startkarte vom Deck
         uno.shuffle();
-        Card topCard = uno.dealInitialHand(1).get(0);
+        do {
+            topCard = uno.dealInitialHand(1).get(0);
+        } while ((topCard.color == Color.BLACK) && (topCard.value == Value.PLUS_FOUR));
         System.out.println("Startkarte ist: " + topCard);
         return topCard;
     }
