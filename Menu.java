@@ -19,10 +19,7 @@ public class Menu {
 
     public static void runMenu() {
         Menu.setSpieler(spieler);
-        //System.out.println(spieler.getName() + " ist dran");
-
         Card topCard = uno.getTopCard();
-        //System.out.println("Top-Karte: " + topCard);
 
         // Karten anzeigen
         spieler.showCards();
