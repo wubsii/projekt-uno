@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Spieler {
 
@@ -103,26 +105,42 @@ public class Spieler {
 
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
-        int choice = input.nextInt();
+        String choice = input.next().toLowerCase();
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(choice);
+
+        int choiceNumber = 0;
+        if (matcher.find()) {
+            String numberStr = matcher.group();
+            choiceNumber = Integer.parseInt(numberStr);
+            System.out.println(choiceNumber);
+        }
+
         input.nextLine(); // Buffer leeren
 
         // prüfen ob Auswahl gültig ist
-        if (choice < 1 || choice > hand.size()) {
+        if (choiceNumber < 1 || choiceNumber > hand.size()) {
             System.out.println("Ungültige Auswahl!");
             return null;
         }
 
-        Card selectedCard = hand.get(choice - 1);
+        Card selectedCard = hand.get(choiceNumber - 1);
 
         // prüfen ob Karte spielbar ist
         if (isValidMove(selectedCard, topCard)) {
-            hand.remove(choice - 1);
+            hand.remove(choiceNumber - 1);
             System.out.println("Du hast gespielt: " + selectedCard);
             discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
             return selectedCard;
         } else {
             System.out.println("Diese Karte darfst du nicht spielen!");
             return null;
+        }
+    }
+
+    public void declareUNO(String input){
+        if (hand.size() == 1 && input.contains("uno")) {
+            System.out.println("UNO!");
         }
     }
 
@@ -145,6 +163,8 @@ public class Spieler {
 
         return false;
     }
+
+
 
     // DARF KEINE BLACK +4 CARD SEIN
     public Card getStartercard() {
