@@ -4,18 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Spiel {
-//    private ArrayList<Card> deck = new ArrayList<>();
 
-    // Constructor vom Spiel wo wir die Daten farben und wert inunsere ArrayList namens deck hinzufügen
-//    public Spiel() {
-//        String[] farben = {"Rot", "Gelb", "Grün", "Blau"};
-//        String[] werte = {"0","1","2","3","4","5","6","7","8","9","Skip","Reverse","+2"};
-//
-//        for (String f : farben) {
-//            for (String w : werte) {
-//                deck.add(new Card(f, w));
-//            }
-//        }
     List<Card> deck = Deck.makeDeck();
     private Card topCard;
     DiscardPile discardPile;
@@ -102,6 +91,8 @@ public class Spiel {
         System.out.println("Startkarte ist: " + topCard);
         return topCard;
     }
+
+
 
 
 }

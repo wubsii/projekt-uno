@@ -19,13 +19,13 @@ public class Menu {
 
     public static void runMenu() {
         Menu.setSpieler(spieler);
-        System.out.println(spieler.getName() + " ist dran");
+        //System.out.println(spieler.getName() + " ist dran");
 
         Card topCard = uno.getTopCard();
-        System.out.println("Top-Karte: " + topCard);
+        //System.out.println("Top-Karte: " + topCard);
 
         // Karten anzeigen
-        spieler.playerHand();
+        spieler.showCards();
         while (true) {
             showMenu();
             System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
@@ -34,16 +34,10 @@ public class Menu {
             switch (input) {
                 case 1:
                     // Karte spielen
-                    Card played =
-                            spieler.whichCardWouldYouLikeToPlay(topCard);
-
+                    Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
                     if (played != null) {
-
                         uno.setTopCard(played);
-
-                        System.out.println(
-                                "Neue Top-Karte: " + played
-                        );
+                        System.out.println("Neue Top-Karte: " + played);
                     }
                     break;
                 case 2:

@@ -12,34 +12,42 @@ public class Spieler {
     private DiscardPile discardPile;
     Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
+    Spieler[] spielerListe = new Spieler[4];
 
-    public Spieler(DiscardPile discardPile) {
-        this.discardPile = discardPile;
-    }
 
-    public void setHand(ArrayList<Card> hand) {
-        this.hand = hand;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
+    /*
+        Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
+        •	Leerer Name: Gibt der Nutzer keinen Namen ein, wird er erneut zur Eingabe aufgefordert.
+        •	Ungültige Zeichen: Enthält der Name Zahlen oder Sonderzeichen, wird er als ungültig betrachtet und der Nutzer wird erneut zur Eingabe aufgefordert.
+        •	Doppelter Name: Ist der eingegebene Name bereits einem anderen Spieler zugewiesen, wird der Nutzer darauf hingewiesen und muss einen anderen Namen eingeben.
+        Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeigt werden.
+    */
     public String gettingName() {
         // Eingabe wie die Leute heißen, die das mit spielen
         System.out.print("Wie heißt der Spieler? ");
-        return this.name = input.nextLine();
+        this.name = input.nextLine();
+
+        return this.name;
     }
 
+
+    // Zum zeigen wie die Spieler heißen
     public void showNames(String[] playerName) {
         // Namen ausgeben
         System.out.println("Spieler: ");
         for (String name : playerName) {
             System.out.println(name);
+        }
+    }
+
+    public void createPlayers() {
+        // Spieler erstellen
+        for (int i = 0; i < 4; i++) {
+
+            spielerListe[i] = new Spieler(discardPile);
+
+            String name = spielerListe[i].gettingName();
+            spielerListe[i].setName(name);
         }
     }
 
@@ -66,27 +74,22 @@ public class Spieler {
     public ArrayList<Card> playerHand() {
         uno.shuffle();
         hand = uno.dealInitialHand(7);
-
         System.out.println("Du (" + name + ") hast folgende Karten:");
         for (Card c : hand) {
             c.print();
         }
-
         return hand;
     }
 
 
     public void showCards() {
         System.out.println(name + " ist jetzt an der Reihe");
-        System.out.println("Bitte bestätigen (j/n), damit nur du die Karten siehst: ");
+        System.out.print("Bitte bestätigen (j/n), damit nur du die Karten siehst: ");
 
         char showMe = input.next().charAt(0);
 
         if (showMe == 'j' || showMe == 'J') {
-            System.out.println("Du (" + name + ") hast folgende Karten:");
-            for (Card c : hand) {
-                c.print();
-            }
+            playerHand();
         } else {
             System.out.println("Bitte bestätige mit 'j', um fortzufahren.");
         }
@@ -94,7 +97,6 @@ public class Spieler {
 
 
     public Card whichCardWouldYouLikeToPlay(Card topCard) {
-
         // Karten anzeigen
         // System.out.println(hand);
         // System.out.println("HAND SIZE: " + hand.size());
@@ -102,7 +104,6 @@ public class Spieler {
         for (int i = 0; i < hand.size(); i++) {
             System.out.println((i + 1) + ": " + hand.get(i));
         }
-
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
         String choice = input.next().toLowerCase();
@@ -164,8 +165,6 @@ public class Spieler {
         return false;
     }
 
-
-
     // DARF KEINE BLACK +4 CARD SEIN
     public Card getStartercard() {
         Card topCard;
@@ -176,5 +175,21 @@ public class Spieler {
         } while ((topCard.color == Color.BLACK) && (topCard.value == Value.PLUS_FOUR));
         System.out.println("Startkarte ist: " + topCard);
         return topCard;
+    }
+
+    public Spieler(DiscardPile discardPile) {
+        this.discardPile = discardPile;
+    }
+
+    public void setHand(ArrayList<Card> hand) {
+        this.hand = hand;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

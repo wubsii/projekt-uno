@@ -29,14 +29,14 @@ public class Main {
         // Startspieler
         int start = spielerListe[0].randomizePlayer();
 
-        uno.getStartercard();
-
         while (true) {
 
             Spieler aktuellerSpieler = spielerListe[(start++) % 4];
+            Card topCard = uno.getStartercard();
             Menu.setSpieler(aktuellerSpieler);
             Menu.setSpiel(uno);
 
+            //Menu.showMenu();
             Menu.runMenu();
         }
     }
