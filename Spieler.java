@@ -19,6 +19,10 @@ public class Spieler {
         this.hand = hand;
     }
 
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
     public void setName(String name){
         this.name = name;
     }
