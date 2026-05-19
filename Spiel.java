@@ -84,7 +84,7 @@ public class Spiel {
 
     public Card getStartercard() {
         do {
-            shuffle(); // mischt DEIN aktuelles Deck
+           // shuffle(); // mischt DEIN aktuelles Deck
             topCard = dealInitialHand(1).get(0);
         } while (topCard.color == Color.BLACK);
 

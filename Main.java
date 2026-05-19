@@ -27,10 +27,7 @@ public class Main {
 
         // Karten einmal verteilen
         for (int i = 0; i < 4; i++) {
-
-            spielerListe[i].setHand(
-                    uno.dealInitialHand(7)
-            );
+            spielerListe[i].setHand(uno.dealInitialHand(7));
         }
 
         // Startspieler
