@@ -15,19 +15,42 @@ public class Spieler {
     Spieler[] spielerListe = new Spieler[4];
 
 
-    /*
-        Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
-        •	Leerer Name: Gibt der Nutzer keinen Namen ein, wird er erneut zur Eingabe aufgefordert.
-        •	Ungültige Zeichen: Enthält der Name Zahlen oder Sonderzeichen, wird er als ungültig betrachtet und der Nutzer wird erneut zur Eingabe aufgefordert.
-        •	Doppelter Name: Ist der eingegebene Name bereits einem anderen Spieler zugewiesen, wird der Nutzer darauf hingewiesen und muss einen anderen Namen eingeben.
-        Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeigt werden.
-    */
-    public String gettingName() {
-        // Eingabe wie die Leute heißen, die das mit spielen
-        System.out.print("Wie heißt der Spieler? ");
-        this.name = input.nextLine();
+  /*
+Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
+• Leerer Name: Gibt der Nutzer keinen Namen ein, wird er erneut zur Eingabe aufgefordert.
+• Ungültige Zeichen: Enthält der Name Zahlen oder Sonderzeichen, wird er als ungültig betrachtet und der Nutzer wird erneut zur Eingabe aufgefordert.
+• Doppelter Name: Ist der eingegebene Name bereits einem anderen Spieler zugewiesen, wird der Nutzer darauf hingewiesen und muss einen anderen Namen eingeben.
+Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeigt werden.
+*/
 
-        return this.name;
+    public String gettingName(List<String> vorhandeneNamen) {
+        while (true) {
+            System.out.print("Wie heißt der Spieler? ");
+            String eingabe = input.nextLine().trim();
+
+            // Prüfen auf leeren Namen
+            if (eingabe.isEmpty()) {
+                System.out.println("Der Name darf nicht leer sein.");
+                continue;
+            }
+
+            // Prüfen auf ungültige Zeichen
+            // Erlaubt nur Buchstaben und Leerzeichen
+            if (!eingabe.matches("[a-zA-ZäöüÄÖÜß ]+")) {
+                System.out.println("Der Name enthält ungültige Zeichen.");
+                continue;
+            }
+
+            // Prüfen auf doppelte Namen
+            if (vorhandeneNamen.contains(eingabe)) {
+                System.out.println("Dieser Name ist bereits vergeben.");
+                continue;
+            }
+
+            // Name gültig
+            this.name = eingabe;
+            return this.name;
+        }
     }
 
 
@@ -41,13 +64,15 @@ public class Spieler {
     }
 
     public void createPlayers() {
+
+        List<String> vorhandeneNamen = new ArrayList<>();
+
         // Spieler erstellen
         for (int i = 0; i < 4; i++) {
-
             spielerListe[i] = new Spieler(discardPile);
-
-            String name = spielerListe[i].gettingName();
+            String name = spielerListe[i].gettingName(vorhandeneNamen);
             spielerListe[i].setName(name);
+            vorhandeneNamen.add(name);
         }
     }
 
