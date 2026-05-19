@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Card {
-//    String farbe;
+    //    String farbe;
 //    String wert;
 //
 //    // Constructor der Karten, wo die Werte von der Klasse SPIEL.java genommen werden und in die Variablen in der Klasse CARD.java gespeichert werden ....
@@ -16,6 +16,7 @@ public class Card {
     public void print() {
         System.out.println(color + " " + value);
     }
+
     public Value value;
     public Color color;
 
@@ -24,20 +25,26 @@ public class Card {
         color = c;
     }
 
-    public static List<Card> makeDeck() {
-        List<Card> deck = new ArrayList<Card>();
-        for (Color c : Color.values()) {
-            for (Value v : Value.values()) {
-                deck.add(new Card(v, c));
-            }
-        }
-        return deck;
+    // Gibt einfach den Wert der Enumeration zurück
+    public int getPunktwert() {
+        return value.getPunktwert();
     }
 
-    // Override für die ausgabe der Karten
-    @Override
-    public String toString() {
-        return color + " " + value;
+        public static List<Card> makeDeck () {
+            List<Card> deck = new ArrayList<Card>();
+            for (Color c : Color.values()) {
+                for (Value v : Value.values()) {
+                    deck.add(new Card(v, c));
+                }
+            }
+            return deck;
+        }
+
+        // Override für die ausgabe der Karten
+        @Override
+        public String toString () {
+            return color + " " + value;
+        }
     }
 
 
@@ -71,4 +78,3 @@ public class Card {
 //    }
 
 
-}

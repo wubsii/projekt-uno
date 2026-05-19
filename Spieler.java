@@ -99,10 +99,12 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public ArrayList<Card> playerHand() {
         uno.shuffle();
         hand = uno.dealInitialHand(7);
+
         System.out.println("Du (" + name + ") hast folgende Karten:");
         for (Card c : hand) {
             c.print();
         }
+
         return hand;
     }
 
@@ -114,7 +116,10 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         char showMe = input.next().charAt(0);
 
         if (showMe == 'j' || showMe == 'J') {
-            playerHand();
+            System.out.println("Du (" + name + ") hast folgende Karten:");
+            for (Card c : hand) {
+                c.print();
+            }
         } else {
             System.out.println("Bitte bestätige mit 'j', um fortzufahren.");
         }
@@ -122,6 +127,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
 
     public Card whichCardWouldYouLikeToPlay(Card topCard) {
+
         // Karten anzeigen
         // System.out.println(hand);
         // System.out.println("HAND SIZE: " + hand.size());
@@ -129,6 +135,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         for (int i = 0; i < hand.size(); i++) {
             System.out.println((i + 1) + ": " + hand.get(i));
         }
+
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
         String choice = input.next().toLowerCase();
@@ -190,14 +197,12 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         return false;
     }
 
-    // DARF KEINE BLACK +4 CARD SEIN
+    // DARF KEINE BLACK CARD SEIN
     public Card getStartercard() {
         Card topCard;
         // Startkarte vom Deck
         uno.shuffle();
-        do {
-            topCard = uno.dealInitialHand(1).get(0);
-        } while ((topCard.color == Color.BLACK) && (topCard.value == Value.PLUS_FOUR));
+        Card topCard = uno.dealInitialHand(1).get(0);
         System.out.println("Startkarte ist: " + topCard);
         return topCard;
     }
