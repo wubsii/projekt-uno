@@ -224,4 +224,6 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public String getName() {
         return name;
     }
+
+    public Card[] getHand(){return getHand();}
 }

@@ -45,7 +45,24 @@ public class Card {
         public String toString () {
             return color + " " + value;
         }
+
+
+    public Value getValue() {
+        return value;
     }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+}
 
 
     //toString-Methode für Ausgabe von buntem Text für die Karten:
