@@ -26,8 +26,8 @@ public class Card {
     }
 
     // Gibt einfach den Wert der Enumeration zurück
-    public int getPunktwert() {
-        return value.getPunktwert();
+    public int getPointValue() {
+        return value.getPointValue();
     }
 
         public static List<Card> makeDeck () {

@@ -140,29 +140,26 @@ public class Spiel {
 
 }
 
-//Und hier noch einmal das Verwendungsbeispiel, damit der die Spiel-Klasse schreibt
-// genau weiß, wie er den Punktenrechner einbinden soll:
-
 // Zu Beginn des Spiels – alle Spieler-Objekte erstellen
-//Spieler anna  = new Spieler(discardPile);
-//Spieler ben   = new Spieler(discardPile);
-//Spieler clara = new Spieler(discardPile);
+// Player anna  = new Player(discardPile);
+// Player ben   = new Player(discardPile);
+// Player clara = new Player(discardPile);
 //
-//anna.setName("Anna");
-//ben.setName("Ben");
-//clara.setName("Clara");
+// anna.setName("Anna");
+// ben.setName("Ben");
+// clara.setName("Clara");
 //
-/// / Punktenrechner mit Spieler-Objekten starten
-//List<Spieler> alleSpieler = List.of(anna, ben, clara);
-//Punktenrechner rechner = new Punktenrechner(alleSpieler);
+// ScoreCalculator mit Spieler-Objekten starten
+// List<Player> allPlayers = List.of(anna, ben, clara);
+// ScoreCalculator calculator = new ScoreCalculator(allPlayers);
 //
-//// Nach jeder Runde – Sieger und Verlierer als Spieler-Objekte übergeben
-//List<Spieler> verlierer = List.of(ben, clara);
-//rechner.rundeAbrechnen(anna, verlierer);
-//rechner.punktestandAnzeigen();
+// Nach jeder Runde – Sieger und Verlierer als Spieler-Objekte übergeben
+// List<Player> losers = List.of(ben, clara);
+// calculator.settleRound(anna, losers);
+// calculator.displayScoreboard();
 //
-//// Prüfen ob das Spiel vorbei ist
-//String sieger = rechner.spielsiegerErmitteln();
-//if (sieger != null) {
-//    System.out.println("Spielende! Gesamtsieger: " + sieger);
-//}
+// Prüfen ob das Spiel vorbei ist
+// String winner = calculator.determineGameWinner();
+// if (winner != null) {
+//     System.out.println("Spielende! Gesamtsieger: " + winner);
+// }

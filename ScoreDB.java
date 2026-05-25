@@ -7,16 +7,16 @@ import java.util.HashMap;
  * Verwendet die SqliteClient-Klasse fuer den Zugriff auf die SQLite-Datenbank.
  *
  * Zusammenarbeit mit anderen Klassen:
- *   - SqliteClient:    Stellt die Verbindung zur Datenbank her (Klasse vom Lehrer)
- *   - Punktenrechner:  Ruft PunkteDB auf, um Punkte zu speichern und zu laden
+ *   - SqliteClient:   Stellt die Verbindung zur Datenbank her (Klasse vom Lehrer)
+ *   - ScoreCalculator: Ruft ScoreDB auf, um Punkte zu speichern und zu laden
  */
-public class PunkteDB {
+public class ScoreDB {
 
     // Die Verbindung zur Datenbank (Klasse vom Lehrer)
     private SqliteClient db;
 
     // Name der Tabelle in der Datenbank
-    private static final String TABELLE = "PUNKTESTAND";
+    private static final String TABLE = "PUNKTESTAND";
 
     // -----------------------------------------------------------------------
     // Konstruktor
@@ -29,20 +29,20 @@ public class PunkteDB {
      * Die Datenbankdatei "uno.db" wird automatisch erstellt,
      * wenn sie noch nicht vorhanden ist.
      */
-    public PunkteDB() {
+    public ScoreDB() {
         try {
             // Datenbankdatei oeffnen oder neu erstellen
             db = new SqliteClient("uno.db");
 
             // Tabelle nur erstellen wenn sie noch nicht existiert
-            if (!db.tableExists(TABELLE)) {
+            if (!db.tableExists(TABLE)) {
                 db.executeStatement(
-                        "CREATE TABLE " + TABELLE + " (" +
+                        "CREATE TABLE " + TABLE + " (" +
                                 "spielername TEXT PRIMARY KEY, " + // Name ist der eindeutige Schluessel
                                 "punkte INTEGER NOT NULL" +         // Punktestand als Ganzzahl
                                 ");"
                 );
-                System.out.println("Datenbanktabelle wurde erstellt: " + TABELLE);
+                System.out.println("Datenbanktabelle wurde erstellt: " + TABLE);
             }
 
         } catch (SQLException e) {
@@ -59,19 +59,19 @@ public class PunkteDB {
      * Traegt einen neuen Spieler mit 0 Punkten in die Datenbank ein.
      * Wird einmalig zu Beginn des Spiels fuer jeden Spieler aufgerufen.
      *
-     * @param spielerName  Name des Spielers, der eingetragen werden soll
+     * @param playerName  Name des Spielers, der eingetragen werden soll
      */
-    public void spielerEintragen(String spielerName) {
+    public void registerPlayer(String playerName) {
         try {
             db.executeStatement(
-                    "INSERT INTO " + TABELLE + " (spielername, punkte) " +
-                            "VALUES ('" + spielerName + "', 0);"
+                    "INSERT INTO " + TABLE + " (spielername, punkte) " +
+                            "VALUES ('" + playerName + "', 0);"
             );
-            System.out.println("Spieler eingetragen: " + spielerName);
+            System.out.println("Spieler eingetragen: " + playerName);
 
         } catch (SQLException e) {
             // Fehlermeldung ausgeben wenn das Eintragen fehlschlaegt
-            System.out.println("Fehler beim Eintragen von " + spielerName
+            System.out.println("Fehler beim Eintragen von " + playerName
                     + ": " + e.getMessage());
         }
     }
@@ -84,22 +84,22 @@ public class PunkteDB {
      * Aktualisiert den Punktestand eines Spielers in der Datenbank.
      * Wird nach jeder Runde fuer den Rundensieger aufgerufen.
      *
-     * @param spielerName  Name des Spielers, dessen Punkte aktualisiert werden
-     * @param neuePunkte   Neuer Gesamtpunktestand des Spielers
+     * @param playerName  Name des Spielers, dessen Punkte aktualisiert werden
+     * @param newScore    Neuer Gesamtpunktestand des Spielers
      */
-    public void punkteAktualisieren(String spielerName, int neuePunkte) {
+    public void updateScore(String playerName, int newScore) {
         try {
             db.executeStatement(
-                    "UPDATE " + TABELLE + " " +
-                            "SET punkte = " + neuePunkte + " " +
-                            "WHERE spielername = '" + spielerName + "';"
+                    "UPDATE " + TABLE + " " +
+                            "SET punkte = " + newScore + " " +
+                            "WHERE spielername = '" + playerName + "';"
             );
-            System.out.println("Punkte aktualisiert: " + spielerName
-                    + " → " + neuePunkte + " Punkte.");
+            System.out.println("Punkte aktualisiert: " + playerName
+                    + " → " + newScore + " Punkte.");
 
         } catch (SQLException e) {
             // Fehlermeldung ausgeben wenn die Aktualisierung fehlschlaegt
-            System.out.println("Fehler beim Aktualisieren von " + spielerName
+            System.out.println("Fehler beim Aktualisieren von " + playerName
                     + ": " + e.getMessage());
         }
     }
@@ -118,11 +118,11 @@ public class PunkteDB {
      *
      * @return ArrayList mit allen Spielern und ihren Punkten
      */
-    public ArrayList<HashMap<String, String>> allePunkteLaden() {
+    public ArrayList<HashMap<String, String>> loadAllScores() {
         try {
             // SELECT mit absteigender Sortierung nach Punkten
             return db.executeQuery(
-                    "SELECT spielername, punkte FROM " + TABELLE +
+                    "SELECT spielername, punkte FROM " + TABLE +
                             " ORDER BY punkte DESC;"
             );
 
@@ -141,17 +141,17 @@ public class PunkteDB {
      * Laedt alle Punktestaende aus der Datenbank und gibt sie in der Konsole aus.
      * Kann jederzeit aufgerufen werden, um den aktuellen Stand anzuzeigen.
      */
-    public void punktestandAnzeigen() {
+    public void displayScoreboard() {
         // Alle Eintraege aus der Datenbank laden
-        ArrayList<HashMap<String, String>> ergebnisse = allePunkteLaden();
+        ArrayList<HashMap<String, String>> results = loadAllScores();
 
         System.out.println("=== Punktestand aus der Datenbank ===");
 
         // Jede Zeile ist eine HashMap mit Spaltenname als Key und Wert als Value
-        for (HashMap<String, String> zeile : ergebnisse) {
-            String name   = zeile.get("spielername");
-            String punkte = zeile.get("punkte");
-            System.out.println("  " + name + ": " + punkte + " Punkte");
+        for (HashMap<String, String> row : results) {
+            String name  = row.get("spielername");
+            String score = row.get("punkte");
+            System.out.println("  " + name + ": " + score + " Punkte");
         }
     }
 }
