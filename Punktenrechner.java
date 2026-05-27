@@ -69,20 +69,20 @@ public class Punktenrechner {
         int rundenpunkte = 0;
 
         // Alle Handkarten aller Verlierer durchgehen und Punktwerte addieren
-        for (Spieler s : verlierer) {
-            int punkteDiesesSpielers = 0;
-
-            for (Card karte : s.getHand()) {
-                // getPunktwert() kommt aus der Card-Klasse,
-                // die ihrerseits den Wert aus dem Value-Enum holt
-                punkteDiesesSpielers += karte.getPunktwert();
-            }
-
-            System.out.println("  " + s.getName()
-                    + " hatte Karten im Wert von " + punkteDiesesSpielers + " Punkten.");
-
-            rundenpunkte += punkteDiesesSpielers;
-        }
+//        for (Spieler s : verlierer) {
+//            int punkteDiesesSpielers = 0;
+//
+//            for (Card karte : s.getHand()) {
+//                // getPunktwert() kommt aus der Card-Klasse,
+//                // die ihrerseits den Wert aus dem Value-Enum holt
+//                punkteDiesesSpielers += karte.getPunktwert();
+//            }
+//
+//            System.out.println("  " + s.getName()
+//                    + " hatte Karten im Wert von " + punkteDiesesSpielers + " Punkten.");
+//
+//            rundenpunkte += punkteDiesesSpielers;
+//        }
 
         // Rundenpunkte zum bisherigen Gesamtstand des Siegers hinzufügen
         // getOrDefault: falls der Name noch nicht in der Map ist, wird 0 genommen

@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Spiel {
 
@@ -51,7 +48,6 @@ public class Spiel {
             Menu.setSpieler(aktuellerSpieler);
             Menu.setSpiel(uno);
 
-            // Menu.showMenu();
             Menu.runMenu();
         }
     }
@@ -136,7 +132,39 @@ public class Spiel {
     }
 
 
+    public static char cardValue(Card topCard) {
+        Scanner input = new Scanner(System.in);
 
+        if (topCard.color == Color.BLACK) {
+            if (topCard.value == Value.COLOR_CHANGE) {
+                // Farbe wählen
+                System.out.println("Welche Farbe wünscht du dir? ");
+                char color = input.next().charAt(0);
+                return color;
+            }
+
+            if (topCard.value == Value.PLUS_FOUR) {
+                // Farbe wählen
+                System.out.println("Welche Farbe wünscht du dir? ");
+                char color = input.next().charAt(0);
+                return color;
+                // 4 Karten abheben
+            }
+
+            if (topCard.value == Value.PLUS_TWO) {
+                // 2 Karten abheben
+            }
+
+            if (topCard.value == Value.REVERSE) {
+                // Spielrichtung muss geändert werden
+            }
+
+            if (topCard.value == Value.SKIP) {
+                // Nächster Spieler wird übersprungen
+            }
+        }
+        return 0;
+    }
 
 }
 
