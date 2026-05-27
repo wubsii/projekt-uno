@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -19,36 +18,36 @@ public class Spiel {
 
         uno.shuffle();
 
-        Spieler[] spielerListe = new Spieler[4];
+        Player[] playerListe = new Player[4];
 
         List<String> vorhandeneNamen = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
 
-            spielerListe[i] = new Spieler(discardPile);
+            playerListe[i] = new Player(discardPile);
 
-            String name = spielerListe[i].gettingName(vorhandeneNamen);
+            String name = playerListe[i].gettingName(vorhandeneNamen);
 
-            spielerListe[i].setName(name);
+            playerListe[i].setName(name);
 
             vorhandeneNamen.add(name);
         }
 
         // Karten einmal verteilen
         for (int i = 0; i < 4; i++) {
-            spielerListe[i].setHand(uno.dealInitialHand(7));
+            playerListe[i].setHand(uno.dealInitialHand(7));
         }
 
         // Startspieler
-        int start = spielerListe[0].randomizePlayer();
+        int start = playerListe[0].randomizePlayer();
 
         while (true) {
 
-            Spieler aktuellerSpieler = spielerListe[(start++) % 4];
+            Player aktuellerPlayer = playerListe[(start++) % 4];
 
             Card topCard = uno.getStartercard();
 
-            Menu.setSpieler(aktuellerSpieler);
+            Menu.setSpieler(aktuellerPlayer);
             Menu.setSpiel(uno);
 
             // Menu.showMenu();

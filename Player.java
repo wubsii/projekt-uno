@@ -5,14 +5,14 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Spieler {
+public class Player {
 
     Scanner input = new Scanner(System.in);
     String name;
     private DiscardPile discardPile;
     Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
-    Spieler[] spielerListe = new Spieler[4];
+    Player[] playerListe = new Player[4];
 
 
   /*
@@ -69,9 +69,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
         // Spieler erstellen
         for (int i = 0; i < 4; i++) {
-            spielerListe[i] = new Spieler(discardPile);
-            String name = spielerListe[i].gettingName(vorhandeneNamen);
-            spielerListe[i].setName(name);
+            playerListe[i] = new Player(discardPile);
+            String name = playerListe[i].gettingName(vorhandeneNamen);
+            playerListe[i].setName(name);
             vorhandeneNamen.add(name);
         }
     }
@@ -209,7 +209,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         return topCard;
     }
 
-    public Spieler(DiscardPile discardPile) {
+    public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
 

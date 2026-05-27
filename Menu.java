@@ -6,11 +6,11 @@ public class Menu {
     private static final String RESET = "\u001B[0m";
     private static final String YELLOW = "\u001B[33m";
 
-    private static Spieler spieler;
+    private static Player player;
     private static Spiel uno;
 
-    public static void setSpieler(Spieler s) {
-        spieler = s;
+    public static void setSpieler(Player s) {
+        player = s;
     }
 
     public static void setSpiel(Spiel spiel) {
@@ -18,11 +18,11 @@ public class Menu {
     }
 
     public static void runMenu() {
-        Menu.setSpieler(spieler);
+        Menu.setSpieler(player);
         Card topCard = uno.getTopCard();
 
         // Karten anzeigen
-        spieler.showCards();
+        player.showCards();
         while (true) {
             showMenu();
             System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
@@ -31,7 +31,7 @@ public class Menu {
             switch (input) {
                 case 1:
                     // Karte spielen
-                    Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
+                    Card played = player.whichCardWouldYouLikeToPlay(topCard);
                     if (played != null) {
                         uno.setTopCard(played);
                         System.out.println("Neue Top-Karte: " + played);
