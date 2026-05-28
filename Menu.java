@@ -6,24 +6,25 @@ public class Menu {
     private static final String RESET = "\u001B[0m";
     private static final String YELLOW = "\u001B[33m";
 
-    private static Spieler spieler;
-    private static Spiel uno;
+    private static Player player;
+    private static Game uno;
 
-    public static void setSpieler(Spieler s) {
-        spieler = s;
+    public static void setSpieler(Player s) {
+        player = s;
     }
 
-    public static void setSpiel(Spiel spiel) {
-        uno = spiel;
+    public static void setSpiel(Game game) {
+        uno = game;
     }
 
     public static void runMenu() {
-        Menu.setSpieler(spieler);
         Card topCard = uno.getTopCard();
+        Menu.setSpieler(player);
+
 
         // Karten anzeigen
-        spieler.showCards();
-        while (true) {
+        player.showCards();
+
             showMenu();
             System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
             int input = scanner.nextInt();
@@ -31,7 +32,7 @@ public class Menu {
             switch (input) {
                 case 1:
                     // Karte spielen
-                    Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
+                    Card played = player.whichCardWouldYouLikeToPlay(topCard);
                     if (played != null) {
                         uno.setTopCard(played);
                         System.out.println("Neue Top-Karte: " + played);
@@ -49,7 +50,6 @@ public class Menu {
                 default:
                     System.out.println(YELLOW + "Ungültige Eingabe, bitte 1 - 4 eingeben: " + RESET);
             }
-        }
     }
 
     public static void showMenu() {

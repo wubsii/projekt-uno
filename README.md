@@ -2,7 +2,7 @@
 
 ## <span style="color:green">Beschreibung des Spiels</span>
 
-Dieses Projekt ist ein konsolenbasiertes UNO-Spiel, das in Java objekt-orientiert programmiert wurde. Es unterstützt bis zu vier Spieler
+Dieses Projekt ist ein konsolenbasiertes UNO-Game, das in Java objekt-orientiert programmiert wurde. Es unterstützt bis zu vier Player
 und beinhaltet simple UNO-Spielmechanik.
 
 ## <span style="color:red">Features</span>
@@ -21,15 +21,15 @@ und beinhaltet simple UNO-Spielmechanik.
 Das Projekt beinhaltet mehrere Klassen:
 
 - Main.java --> Start des Spiels
-- Spiel.java --> kontrolliert den Spielfluss und die Spielregeln
-- Spieler.java --> Ausgabe der Kartenhand und Auswahl der Spielzüge
+- Game.java --> kontrolliert den Spielfluss und die Spielregeln
+- Player.java --> Ausgabe der Kartenhand und Auswahl der Spielzüge
 - Card.java --> erstellt die Spielkarten
 - Deck.java --> erstellt das Spieldeck
 - DiscardPile.java --> Zwischenlagerung des Ablagestapels
 - Menu.java --> erstellt das Eingabemenü und kontrolliert dessen Logik
 - Helper.java --> Sammlung von Helper-Methoden
 
-## <span style="color:blue">Spiel starten</span>
+## <span style="color:blue">Game starten</span>
 
 1. Projekt in IntelliJ IDEA öffnen
 2. Main.java starten
@@ -47,14 +47,14 @@ Das Projekt beinhaltet mehrere Klassen:
 
 ## <span style="color:yellow">Gameflow</span>
 
-1. 4 Spieler werden erstellt
+1. 4 Player werden erstellt
 2. Deck wird erstellt und gemischt, Karten werden ausgeteilt
 3. Startspieler wird ausgelost
-4. Spieler sind der Reihe nach dran und können im Eingabemenü auswählen, was sie als nächstes tun wollen (Spielzug, Hilfe
-anzeigen, Punkte anzeigen, Spiel beenden)
+4. Player sind der Reihe nach dran und können im Eingabemenü auswählen, was sie als nächstes tun wollen (Spielzug, Hilfe
+anzeigen, Punkte anzeigen, Game beenden)
 5. Gültig gespielte Karten werden dem Ablagestapel zugefügt
-6. Spieler ziehen neue Karten vom Deck, wenn sie keine gültige Karte spielen können
+6. Player ziehen neue Karten vom Deck, wenn sie keine gültige Karte spielen können
 7. Das Deck wird vom Ablegestapel wieder befüllt, wenn weniger als 4 Karten übrig sind
 8. Punkte werden in einer Datenbank gespeichert
-9. Eine Runde endet, wenn ein Spieler keine Karten mehr übrig hat
-10. Ein Spiel endet, wenn ein Spieler mehr als 500 Punkte hat oder das Spiel selbst beendet
+9. Eine Runde endet, wenn ein Player keine Karten mehr übrig hat
+10. Ein Game endet, wenn ein Player mehr als 500 Punkte hat oder das Game selbst beendet

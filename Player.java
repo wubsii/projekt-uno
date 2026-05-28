@@ -5,14 +5,13 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Spieler {
+public class Player {
 
     Scanner input = new Scanner(System.in);
     String name;
     private DiscardPile discardPile;
-    Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
-    Spieler[] spielerListe = new Spieler[4];
+    //Player[] playerListe = new Player[4];
 
 
   /*
@@ -63,18 +62,18 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public void createPlayers() {
-
-        List<String> vorhandeneNamen = new ArrayList<>();
-
-        // Spieler erstellen
-        for (int i = 0; i < 4; i++) {
-            spielerListe[i] = new Spieler(discardPile);
-            String name = spielerListe[i].gettingName(vorhandeneNamen);
-            spielerListe[i].setName(name);
-            vorhandeneNamen.add(name);
-        }
-    }
+//    public void createPlayers() {
+//
+//        List<String> vorhandeneNamen = new ArrayList<>();
+//
+//        // Spieler erstellen
+//        for (int i = 0; i < 4; i++) {
+//            playerListe[i] = new Player(discardPile);
+//            String name = playerListe[i].gettingName(vorhandeneNamen);
+//            playerListe[i].setName(name);
+//            vorhandeneNamen.add(name);
+//        }
+//    }
 
     public String[] showOrder(String[] playerName, int start) {
         String[] neueReihenfolge = new String[4];
@@ -96,11 +95,11 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     }
 
 
-    public ArrayList<Card> playerHand() {
-      //  uno.shuffle();
+    public ArrayList<Card> playerHand(Game uno) {
         hand = uno.dealInitialHand(7);
 
         System.out.println("Du (" + name + ") hast folgende Karten:");
+
         for (Card c : hand) {
             c.print();
         }
@@ -134,6 +133,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         for (int i = 0; i < hand.size(); i++) {
             System.out.println((i + 1) + ": " + hand.get(i));
         }
+
+        Game g = new Game(discardPile);
+        g.getStartercard();
 
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
@@ -196,12 +198,16 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         return false;
     }
 
-    public Spieler(DiscardPile discardPile) {
+    public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
 
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
+    }
+
+    public ArrayList<Card> getHand() {
+        return hand;
     }
 
     public void setName(String name){

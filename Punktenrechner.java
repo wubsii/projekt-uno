@@ -32,9 +32,9 @@ public class Punktenrechner {
      * Erstellt einen neuen Punktenrechner, setzt alle Spieler auf 0 Punkte
      * und traegt sie in die Datenbank ein.
      *
-     * @param spieler  Liste aller Spieler-Objekte, die am Spiel teilnehmen
+     * @param player  Liste aller Spieler-Objekte, die am Spiel teilnehmen
      */
-    public Punktenrechner(List<Spieler> spieler) {
+    public Punktenrechner(List<Player> player) {
         gesamtpunkte = new HashMap<>();
 
         // Datenbankverbindung oeffnen
@@ -42,7 +42,7 @@ public class Punktenrechner {
         datenbank = new PunkteDB();
 
         // Jeden Spieler mit 0 Punkten in die Map und in die Datenbank eintragen
-        for (Spieler s : spieler) {
+        for (Player s : player) {
             gesamtpunkte.put(s.getName(), 0);
             datenbank.spielerEintragen(s.getName());
         }
@@ -65,7 +65,7 @@ public class Punktenrechner {
      * @param sieger    Das Spieler-Objekt, das die Runde gewonnen hat
      * @param verlierer Liste aller Spieler-Objekte, die die Runde verloren haben
      */
-    public void rundeAbrechnen(Spieler sieger, List<Spieler> verlierer) {
+    public void rundeAbrechnen(Player sieger, List<Player> verlierer) {
         int rundenpunkte = 0;
 
         // Alle Handkarten aller Verlierer durchgehen und Punktwerte addieren
