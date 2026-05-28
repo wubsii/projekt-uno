@@ -99,7 +99,6 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         hand = uno.dealInitialHand(7);
 
         System.out.println("Du (" + name + ") hast folgende Karten:");
-
         for (Card c : hand) {
             c.print();
         }
@@ -198,6 +197,19 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         return false;
     }
 
+    // DARF KEINE BLACK CARD SEIN
+    public Card getStartercard() {
+        Card topCard;
+
+        do {
+            uno.shuffle();
+            topCard = uno.dealInitialHand(1).get(0);
+        } while (topCard.color == Color.BLACK);
+
+        System.out.println("Startkarte ist: " + topCard);
+        return topCard;
+    }
+
     public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
@@ -217,4 +229,6 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public String getName() {
         return name;
     }
+
+    public Card[] getHand(){return getHand();}
 }

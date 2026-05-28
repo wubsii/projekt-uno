@@ -7,22 +7,22 @@ import java.util.Map;
  * Berechnet Rundenpunkte, speichert Gesamtpunkte und ermittelt den Spielsieger.
  *
  * Zusammenarbeit mit anderen Klassen:
- *   - Card:      Liefert den Punktwert einer einzelnen Karte (getPunktwert())
- *   - Value:     Enum mit den festgelegten Punktwerten pro Kartentyp
- *   - Spieler:   Liefert den Namen und die Handkarten eines Spielers
- *   - PunkteDB:  Speichert und laedt den Punktestand aus der Datenbank
- *   - Spiel:     Ruft den Punktenrechner nach jeder Runde auf
+ *   - Card:     Liefert den Punktwert einer einzelnen Karte (getPointValue())
+ *   - Value:    Enum mit den festgelegten Punktwerten pro Kartentyp
+ *   - Player:   Liefert den Namen und die Handkarten eines Spielers
+ *   - ScoreDB:  Speichert und laedt den Punktestand aus der Datenbank
+ *   - Game:     Ruft den ScoreCalculator nach jeder Runde auf
  */
-public class Punktenrechner {
+public class ScoreCalculator {
 
     // Speichert den aktuellen Gesamtpunktestand jedes Spielers (Name → Punkte)
-    private Map<String, Integer> gesamtpunkte;
+    private Map<String, Integer> totalScores;
 
     // Datenbankverbindung – speichert den Punktestand dauerhaft
-    private PunkteDB datenbank;
+    private ScoreDB database;
 
     // Ab dieser Punktzahl hat ein Spieler das gesamte Spiel gewonnen
-    private static final int GEWINNPUNKTE = 500;
+    private static final int WINNING_SCORE = 500;
 
     // -----------------------------------------------------------------------
     // Konstruktor
@@ -32,19 +32,19 @@ public class Punktenrechner {
      * Erstellt einen neuen Punktenrechner, setzt alle Spieler auf 0 Punkte
      * und traegt sie in die Datenbank ein.
      *
-     * @param player  Liste aller Spieler-Objekte, die am Spiel teilnehmen
+     * @param players  Liste aller Spieler-Objekte, die am Spiel teilnehmen
      */
-    public Punktenrechner(List<Player> player) {
-        gesamtpunkte = new HashMap<>();
+    public ScoreCalculator(List<Player> players) {
+        totalScores = new HashMap<>();
 
         // Datenbankverbindung oeffnen
         // Die Tabelle wird automatisch erstellt falls sie noch nicht existiert
-        datenbank = new PunkteDB();
+        database = new ScoreDB();
 
         // Jeden Spieler mit 0 Punkten in die Map und in die Datenbank eintragen
-        for (Player s : player) {
-            gesamtpunkte.put(s.getName(), 0);
-            datenbank.spielerEintragen(s.getName());
+        for (Player p : players) {
+            totalScores.put(p.getName(), 0);
+            database.registerPlayer(p.getName());
         }
     }
 
@@ -65,24 +65,24 @@ public class Punktenrechner {
      * @param sieger    Das Spieler-Objekt, das die Runde gewonnen hat
      * @param verlierer Liste aller Spieler-Objekte, die die Runde verloren haben
      */
-    public void rundeAbrechnen(Player sieger, List<Player> verlierer) {
+    public void rundeAbrechnen(Spieler sieger, List<Spieler> verlierer) {
         int rundenpunkte = 0;
 
         // Alle Handkarten aller Verlierer durchgehen und Punktwerte addieren
-//        for (Spieler s : verlierer) {
-//            int punkteDiesesSpielers = 0;
-//
-//            for (Card karte : s.getHand()) {
-//                // getPunktwert() kommt aus der Card-Klasse,
-//                // die ihrerseits den Wert aus dem Value-Enum holt
-//                punkteDiesesSpielers += karte.getPunktwert();
-//            }
-//
-//            System.out.println("  " + s.getName()
-//                    + " hatte Karten im Wert von " + punkteDiesesSpielers + " Punkten.");
-//
-//            rundenpunkte += punkteDiesesSpielers;
-//        }
+        for (Spieler s : verlierer) {
+            int punkteDiesesSpielers = 0;
+
+            for (Card karte : s.getHand()) {
+                // getPunktwert() kommt aus der Card-Klasse,
+                // die ihrerseits den Wert aus dem Value-Enum holt
+                punkteDiesesSpielers += karte.getPunktwert();
+            }
+
+            System.out.println("  " + s.getName()
+                    + " hatte Karten im Wert von " + punkteDiesesSpielers + " Punkten.");
+
+            rundenpunkte += punkteDiesesSpielers;
+        }
 
         // Rundenpunkte zum bisherigen Gesamtstand des Siegers hinzufügen
         // getOrDefault: falls der Name noch nicht in der Map ist, wird 0 genommen

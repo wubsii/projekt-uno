@@ -18,6 +18,7 @@ public class Menu {
     }
 
     public static void runMenu() {
+        Menu.setSpieler(spieler);
         Card topCard = uno.getTopCard();
         Menu.setSpieler(player);
 
@@ -50,6 +51,7 @@ public class Menu {
                 default:
                     System.out.println(YELLOW + "Ungültige Eingabe, bitte 1 - 4 eingeben: " + RESET);
             }
+        }
     }
 
     public static void showMenu() {
