@@ -5,7 +5,7 @@ public class Game {
     List<Card> deck = Deck.makeDeck();
     private Card topCard;
     DiscardPile discardPile;
-    private static int richtung = 1;
+    private static int direction = 1;
 
     public Game(DiscardPile discardPile) {
         this.discardPile = discardPile;
@@ -20,37 +20,30 @@ public class Game {
 
         Player[] playerListe = new Player[4];
 
-        List<String> vorhandeneNamen = new ArrayList<>();
+        List<String> existingNames = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
 
             playerListe[i] = new Player(discardPile);
-
-            String name =
-                    playerListe[i].gettingName(vorhandeneNamen);
-
+            String name = playerListe[i].gettingName(existingNames);
             playerListe[i].setName(name);
-
-            vorhandeneNamen.add(name);
+            existingNames.add(name);
         }
 
         // Karten verteilen
         for (int i = 0; i < 4; i++) {
-            playerListe[i].setHand(
-                    uno.dealInitialHand(7));
+            playerListe[i].setHand(uno.dealInitialHand(7));
         }
 
         // Startspieler
-        int start =
-                playerListe[0].randomizePlayer();
+        int start = playerListe[0].randomizePlayer();
 
         // Startkarte
         uno.getStartercard();
 
         while (true) {
 
-            Player aktuellerPlayer =
-                    playerListe[start];
+            Player aktuellerPlayer = playerListe[start];
 
             Menu.setSpieler(aktuellerPlayer);
             Menu.setSpiel(uno);
@@ -68,57 +61,35 @@ public class Game {
                 case REVERSE:
 
                     System.out.println("Richtung geändert!");
-
-                    richtung *= -1;
-
-                    start = (start + richtung + 4) % 4;
-
+                    direction *= -1;
+                    start = (start + direction + 4) % 4;
                     break;
 
                 case SKIP:
 
                     System.out.println("Spieler wird übersprungen!");
-
-                    start = (start + richtung + 4) % 4;
-                    start = (start + richtung + 4) % 4;
-
+                    start = (start + direction + 4) % 4;
+                    start = (start + direction + 4) % 4;
                     break;
 
                 case PLUS_TWO:
 
-                    start = (start + richtung + 4) % 4;
-
-                    System.out.println(
-                            playerListe[start].getName()
-                                    + " zieht 2 Karten!");
-
-                    playerListe[start]
-                            .getHand()
-                            .addAll(uno.dealInitialHand(2));
-
-                    start = (start + richtung + 4) % 4;
-
+                    start = (start + direction + 4) % 4;
+                    System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
+                    playerListe[start].getHand().equals(uno.dealInitialHand(2));
+                    start = (start + direction + 4) % 4;
                     break;
 
                 case PLUS_FOUR:
 
-                    start = (start + richtung + 4) % 4;
-
-                    System.out.println(
-                            playerListe[start].getName()
-                                    + " zieht 4 Karten!");
-
-                    playerListe[start]
-                            .getHand()
-                            .addAll(uno.dealInitialHand(4));
-
-                    start = (start + richtung + 4) % 4;
-
+                    start = (start + direction + 4) % 4;
+                    System.out.println(playerListe[start].getName() + " zieht 4 Karten!");
+                    playerListe[start].getHand().equals(uno.dealInitialHand(4));
+                    start = (start + direction + 4) % 4;
                     break;
 
                 default:
-
-                    start = (start + richtung + 4) % 4;
+                    start = (start + direction + 4) % 4;
             }
         }
     }

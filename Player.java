@@ -196,30 +196,13 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
         return false;
     }
-
-    // DARF KEINE BLACK CARD SEIN
-    public Card getStartercard() {
-        Card topCard;
-
-        do {
-            uno.shuffle();
-            topCard = uno.dealInitialHand(1).get(0);
-        } while (topCard.color == Color.BLACK);
-
-        System.out.println("Startkarte ist: " + topCard);
-        return topCard;
-    }
-
+    
     public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
 
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
-    }
-
-    public ArrayList<Card> getHand() {
-        return hand;
     }
 
     public void setName(String name){
