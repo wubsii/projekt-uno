@@ -29,7 +29,7 @@ public class ScoreCalculator {
     // -----------------------------------------------------------------------
 
     /**
-     * Erstellt einen neuen ScoreCalculator, setzt alle Spieler auf 0 Punkte
+     * Erstellt einen neuen Punktenrechner, setzt alle Spieler auf 0 Punkte
      * und traegt sie in die Datenbank ein.
      *
      * @param players  Liste aller Spieler-Objekte, die am Spiel teilnehmen
@@ -62,43 +62,43 @@ public class ScoreCalculator {
      * Hinweis: In UNO bekommt der Sieger die Punkte der Verlierer gutgeschrieben.
      * Wer zuerst 500 Punkte erreicht, gewinnt das gesamte Spiel.
      *
-     * @param winner   Das Spieler-Objekt, das die Runde gewonnen hat
-     * @param losers   Liste aller Spieler-Objekte, die die Runde verloren haben
+     * @param sieger    Das Spieler-Objekt, das die Runde gewonnen hat
+     * @param verlierer Liste aller Spieler-Objekte, die die Runde verloren haben
      */
-    public void settleRound(Player winner, List<Player> losers) {
-        int roundPoints = 0;
+    public void rundeAbrechnen(Spieler sieger, List<Spieler> verlierer) {
+        int rundenpunkte = 0;
 
         // Alle Handkarten aller Verlierer durchgehen und Punktwerte addieren
-        for (Player p : losers) {
-            int pointsThisPlayer = 0;
+        for (Spieler s : verlierer) {
+            int punkteDiesesSpielers = 0;
 
-            for (Card card : p.getHand()) {
-                // getPointValue() kommt aus der Card-Klasse,
+            for (Card karte : s.getHand()) {
+                // getPunktwert() kommt aus der Card-Klasse,
                 // die ihrerseits den Wert aus dem Value-Enum holt
-                pointsThisPlayer += card.getPointValue();
+                punkteDiesesSpielers += karte.getPunktwert();
             }
 
-            System.out.println("  " + p.getName()
-                    + " hatte Karten im Wert von " + pointsThisPlayer + " Punkten.");
+            System.out.println("  " + s.getName()
+                    + " hatte Karten im Wert von " + punkteDiesesSpielers + " Punkten.");
 
-            roundPoints += pointsThisPlayer;
+            rundenpunkte += punkteDiesesSpielers;
         }
 
         // Rundenpunkte zum bisherigen Gesamtstand des Siegers hinzufügen
         // getOrDefault: falls der Name noch nicht in der Map ist, wird 0 genommen
-        int previousScore = totalScores.getOrDefault(winner.getName(), 0);
-        int newScore = previousScore + roundPoints;
-        totalScores.put(winner.getName(), newScore);
+        int bisherigePunkte = gesamtpunkte.getOrDefault(sieger.getName(), 0);
+        int neuePunkte = bisherigePunkte + rundenpunkte;
+        gesamtpunkte.put(sieger.getName(), neuePunkte);
 
         // Neuen Punktestand dauerhaft in der Datenbank speichern
-        database.updateScore(winner.getName(), newScore);
+        datenbank.punkteAktualisieren(sieger.getName(), neuePunkte);
 
         // Rundenabschluss in der Konsole ausgeben
         System.out.println("=== Rundenende ===");
-        System.out.println("Rundensieger: " + winner.getName()
-                + " bekommt " + roundPoints + " Punkte gutgeschrieben.");
-        System.out.println("Neuer Gesamtstand von " + winner.getName()
-                + ": " + newScore + " Punkte.");
+        System.out.println("Rundensieger: " + sieger.getName()
+                + " bekommt " + rundenpunkte + " Punkte gutgeschrieben.");
+        System.out.println("Neuer Gesamtstand von " + sieger.getName()
+                + ": " + neuePunkte + " Punkte.");
     }
 
     // -----------------------------------------------------------------------
@@ -111,13 +111,13 @@ public class ScoreCalculator {
      *
      * @return Name des Spielsiegers, oder null wenn noch kein Sieger feststeht
      */
-    public String determineGameWinner() {
+    public String spielsiegerErmitteln() {
 
         // Alle Eintraege in der Map durchsuchen
-        for (Map.Entry<String, Integer> entry : totalScores.entrySet()) {
-            if (entry.getValue() >= WINNING_SCORE) {
+        for (Map.Entry<String, Integer> eintrag : gesamtpunkte.entrySet()) {
+            if (eintrag.getValue() >= GEWINNPUNKTE) {
                 // Dieser Spieler hat die Gewinnschwelle erreicht
-                return entry.getKey();
+                return eintrag.getKey();
             }
         }
 
@@ -134,10 +134,10 @@ public class ScoreCalculator {
      * in der Konsole aus.
      * Wird typischerweise nach jeder Runde aufgerufen.
      */
-    public void displayScoreboard() {
+    public void punktestandAnzeigen() {
         // Punktestand direkt aus der Datenbank laden und anzeigen
         // So ist sichergestellt, dass immer der gespeicherte Stand angezeigt wird
-        database.displayScoreboard();
+        datenbank.punktestandAnzeigen();
     }
 
     // -----------------------------------------------------------------------
@@ -146,13 +146,13 @@ public class ScoreCalculator {
 
     /**
      * Gibt die aktuellen Gesamtpunkte eines bestimmten Spielers zurueck.
-     * Kann von der Game-Klasse genutzt werden, um einzelne Punktstaende abzufragen.
+     * Kann von der Spiel-Klasse genutzt werden, um einzelne Punktstaende abzufragen.
      *
-     * @param playerName   Name des gesuchten Spielers
-     * @return             Aktuelle Punktzahl, oder 0 wenn Spieler nicht gefunden
+     * @param spielerName   Name des gesuchten Spielers
+     * @return              Aktuelle Punktzahl, oder 0 wenn Spieler nicht gefunden
      */
-    public int getScore(String playerName) {
+    public int getPunkte(String spielerName) {
         // getOrDefault gibt 0 zurueck, falls der Spieler nicht in der Map ist
-        return totalScores.getOrDefault(playerName, 0);
+        return gesamtpunkte.getOrDefault(spielerName, 0);
     }
 }

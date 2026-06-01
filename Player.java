@@ -10,9 +10,8 @@ public class Player {
     Scanner input = new Scanner(System.in);
     String name;
     private DiscardPile discardPile;
-    Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
-    Player[] playerListe = new Player[4];
+    //Player[] playerListe = new Player[4];
 
 
   /*
@@ -63,18 +62,18 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public void createPlayers() {
-
-        List<String> vorhandeneNamen = new ArrayList<>();
-
-        // Spieler erstellen
-        for (int i = 0; i < 4; i++) {
-            playerListe[i] = new Player(discardPile);
-            String name = playerListe[i].gettingName(vorhandeneNamen);
-            playerListe[i].setName(name);
-            vorhandeneNamen.add(name);
-        }
-    }
+//    public void createPlayers() {
+//
+//        List<String> vorhandeneNamen = new ArrayList<>();
+//
+//        // Spieler erstellen
+//        for (int i = 0; i < 4; i++) {
+//            playerListe[i] = new Player(discardPile);
+//            String name = playerListe[i].gettingName(vorhandeneNamen);
+//            playerListe[i].setName(name);
+//            vorhandeneNamen.add(name);
+//        }
+//    }
 
     public String[] showOrder(String[] playerName, int start) {
         String[] neueReihenfolge = new String[4];
@@ -96,8 +95,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     }
 
 
-    public ArrayList<Card> playerHand() {
-      //  uno.shuffle();
+    public ArrayList<Card> playerHand(Game uno) {
         hand = uno.dealInitialHand(7);
 
         System.out.println("Du (" + name + ") hast folgende Karten:");
@@ -134,6 +132,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         for (int i = 0; i < hand.size(); i++) {
             System.out.println((i + 1) + ": " + hand.get(i));
         }
+
+        Game g = new Game(discardPile);
+        g.getStartercard();
 
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
@@ -195,20 +196,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
         return false;
     }
-
-    // DARF KEINE BLACK CARD SEIN
-    public Card getStartercard() {
-        Card topCard;
-
-        do {
-            uno.shuffle();
-            topCard = uno.dealInitialHand(1).get(0);
-        } while (topCard.color == Color.BLACK);
-
-        System.out.println("Startkarte ist: " + topCard);
-        return topCard;
-    }
-
+    
     public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
