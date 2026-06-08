@@ -47,6 +47,16 @@ public class Card {
         }
 
 
+    private char chosenColor;
+
+    public void setChosenColor(char color) {
+        this.chosenColor = color;
+    }
+
+    public char getChosenColor() {
+        return chosenColor;
+    }
+
     public Value getValue() {
         return value;
     }

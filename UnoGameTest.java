@@ -10,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UnoGameTest {
 
     private DiscardPile discardPile;
-    private Spiel spiel;
+    private Game game;
     private Player player;
 
     // Wird vor jedem Test neu erstellt (sauberer Ausgangszustand)
     @BeforeEach
     void setUp() {
         discardPile = new DiscardPile();
-        spiel = new Spiel(discardPile);
+        game = new Game(discardPile);
         player = new Player(discardPile);
     }
 
@@ -80,7 +80,7 @@ public class UnoGameTest {
 
     @Test
     void isValidMove_blackCard_isAlwaysValid() {
-        // Schwarze Karten (Joker) dürfen immer gespielt werden
+        // Schwarze Karten (Joker) dürfen immer gegamet werden
         Card topCard  = new Card(Value.FIVE,         Color.RED);
         Card joker    = new Card(Value.COLOR_CHANGE,  Color.BLACK);
         assertTrue(player.isValidMove(joker, topCard));
@@ -103,69 +103,69 @@ public class UnoGameTest {
     }
 
     // =========================================================
-    // Spiel.shuffle() – Tests
+    // game.shuffle() – Tests
     // =========================================================
 
     @Test
     void shuffle_deckStillContainsAllCards() {
         // Nach dem Mischen muss die Anzahl der Karten gleich bleiben
-        int sizeBeforeShuffle = spiel.deck.size();
-        spiel.shuffle();
-        assertEquals(sizeBeforeShuffle, spiel.deck.size());
+        int sizeBeforeShuffle = game.deck.size();
+        game.shuffle();
+        assertEquals(sizeBeforeShuffle, game.deck.size());
     }
 
     @Test
     void shuffle_deckOrderIsChanged() {
         // Originale Reihenfolge speichern
-        List<Card> original = new ArrayList<>(spiel.deck);
-        spiel.shuffle();
+        List<Card> original = new ArrayList<>(game.deck);
+        game.shuffle();
 
         // Nach dem Mischen sollte die Reihenfolge anders sein
         // (Wahrscheinlichkeit, dass sie gleich bleibt, ist bei 108 Karten verschwindend gering)
-        assertNotEquals(original, spiel.deck);
+        assertNotEquals(original, game.deck);
     }
 
     // =========================================================
-    // Spiel.dealInitialHand() – Tests
+    // game.dealInitialHand() – Tests
     // =========================================================
 
     @Test
     void dealInitialHand_returnsCorrectNumberOfCards() {
         // Eine Hand mit 7 Karten austeilen
-        ArrayList<Card> hand = spiel.dealInitialHand(7);
+        ArrayList<Card> hand = game.dealInitialHand(7);
         assertEquals(7, hand.size());
     }
 
     @Test
     void dealInitialHand_removesCardsFromDeck() {
         // Das Deck muss nach dem Austeilen kleiner sein
-        int deckSizeBefore = spiel.deck.size();
-        spiel.dealInitialHand(7);
-        assertEquals(deckSizeBefore - 7, spiel.deck.size());
+        int deckSizeBefore = game.deck.size();
+        game.dealInitialHand(7);
+        assertEquals(deckSizeBefore - 7, game.deck.size());
     }
 
     @Test
     void dealInitialHand_singleCard_returnsOneCard() {
         // Auch mit 1 Karte austeilen möglich
-        ArrayList<Card> hand = spiel.dealInitialHand(1);
+        ArrayList<Card> hand = game.dealInitialHand(1);
         assertEquals(1, hand.size());
     }
 
     // =========================================================
-    // Spiel.getStartercard() – Tests
+    // game.getStartercard() – Tests
     // =========================================================
 
     @Test
     void getStartercard_isNeverABlackCard() {
         // Die Startkarte darf keine schwarze Karte sein
-        Card starter = spiel.getStartercard();
+        Card starter = game.getStartercard();
         assertNotEquals(Color.BLACK, starter.getColor());
     }
 
     @Test
     void getStartercard_returnsAValidCard() {
         // Die zurückgegebene Startkarte darf nicht null sein
-        Card starter = spiel.getStartercard();
+        Card starter = game.getStartercard();
         assertNotNull(starter);
     }
 
@@ -226,7 +226,7 @@ public class UnoGameTest {
     @Test
     void deck_numberCards1to9_appearExactlyTwicePerColor() {
         // Zahlenkarten 1–9 kommen genau 2x pro Farbe vor
-        long count = spiel.deck.stream()
+        long count = game.deck.stream()
                 .filter(c -> c.getColor() == Color.GREEN && c.getValue() == Value.NINE)
                 .count();
         assertEquals(2, count);
@@ -235,7 +235,7 @@ public class UnoGameTest {
     @Test
     void deck_numberCardZero_appearExactlyOncePerColor() {
         // Die Null-Karte kommt genau 1x pro Farbe vor
-        long count = spiel.deck.stream()
+        long count = game.deck.stream()
                 .filter(c -> c.getColor() == Color.RED && c.getValue() == Value.ZERO)
                 .count();
         assertEquals(1, count);
@@ -244,7 +244,7 @@ public class UnoGameTest {
     @Test
     void deck_actionCards_appearExactlyTwicePerColor() {
         // Aktionskarten (Skip, Reverse, Plus Two) kommen genau 2x pro Farbe vor
-        long count = spiel.deck.stream()
+        long count = game.deck.stream()
                 .filter(c -> c.getColor() == Color.BLUE && c.getValue() == Value.SKIP)
                 .count();
         assertEquals(2, count);
@@ -253,12 +253,12 @@ public class UnoGameTest {
     @Test
     void deck_blackCards_appearExactlyFourTimes() {
         // Schwarze Karten (Color Change, Plus Four) kommen jeweils genau 4x vor
-        long colorChangeCount = spiel.deck.stream()
+        long colorChangeCount = game.deck.stream()
                 .filter(c -> c.getValue() == Value.COLOR_CHANGE)
                 .count();
         assertEquals(4, colorChangeCount);
 
-        long plusFourCount = spiel.deck.stream()
+        long plusFourCount = game.deck.stream()
                 .filter(c -> c.getValue() == Value.PLUS_FOUR)
                 .count();
         assertEquals(4, plusFourCount);

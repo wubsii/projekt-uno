@@ -6,6 +6,8 @@ public class Game {
     private Card topCard;
     DiscardPile discardPile;
     private static int direction = 1;
+    private static Menu menu;
+
 
     public Game(DiscardPile discardPile) {
         this.discardPile = discardPile;
@@ -40,51 +42,88 @@ public class Game {
 
         // Startkarte
         uno.getStartercard();
+        Card startCard = uno.getTopCard();
+
+        switch (startCard.value) {
+
+            case PLUS_TWO:
+
+                System.out.println(
+                        playerListe[start].getName()
+                                + " zieht 2 Karten!");
+
+                playerListe[start]
+                        .getHand()
+                        .addAll(uno.dealInitialHand(2));
+
+                break;
+
+            case SKIP:
+
+                System.out.println(
+                        playerListe[start].getName()
+                                + " wird übersprungen!");
+
+                start = (start + 1) % 4;
+
+                break;
+
+            case REVERSE:
+
+                direction *= -1;
+
+                break;
+        }
 
         while (true) {
 
             Player aktuellerPlayer = playerListe[start];
 
-            Menu.setSpieler(aktuellerPlayer);
-            Menu.setSpiel(uno);
+            Menu menu = new Menu(uno, aktuellerPlayer);
+            menu.runMenu();
 
-            Menu.runMenu();
+            if (aktuellerPlayer.getHand().isEmpty()) {
+
+                System.out.println(
+                        aktuellerPlayer.getName() + " hat das Spiel gewonnen!");
+
+                break;
+            }
 
             Card topCard = uno.getTopCard();
 
-            // ======================
-            // AKTIONSKARTEN LOGIK
-            // ======================
+            if (topCard.value == Value.COLOR_CHANGE ||
+                    topCard.value == Value.PLUS_FOUR) {
+
+                char chosenColor = cardValue(topCard);
+                topCard.setChosenColor(chosenColor);
+            }
 
             switch (topCard.value) {
 
                 case REVERSE:
-
                     System.out.println("Richtung geändert!");
                     direction *= -1;
                     start = (start + direction + 4) % 4;
                     break;
 
                 case SKIP:
-
                     System.out.println("Spieler wird übersprungen!");
                     start = (start + direction + 4) % 4;
                     start = (start + direction + 4) % 4;
                     break;
 
                 case PLUS_TWO:
-
                     start = (start + direction + 4) % 4;
                     System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
-                    playerListe[start].getHand().equals(uno.dealInitialHand(2));
+                    playerListe[start].getHand().addAll(uno.dealInitialHand(2));
                     start = (start + direction + 4) % 4;
                     break;
 
                 case PLUS_FOUR:
-
                     start = (start + direction + 4) % 4;
                     System.out.println(playerListe[start].getName() + " zieht 4 Karten!");
-                    playerListe[start].getHand().equals(uno.dealInitialHand(4));
+                    playerListe[start].getHand().addAll(uno.dealInitialHand(4));
                     start = (start + direction + 4) % 4;
                     break;
 
@@ -134,6 +173,15 @@ public class Game {
 
         // Schleife die 7 mal durchgeht, damit wir unsere Karten in die Hand bekommen
         for (int i = 0; i < anzahl; i++) {
+            if (deck.isEmpty()) {
+
+                List<Card> recycled =
+                        discardPile.takeAllExceptTop();
+
+                deck.addAll(recycled);
+
+                shuffle();
+            }
             // Hinzufügen einer Karte in unsere Hand (Entfernen einer Karte vom Deck [nimmt von ganz oben])
             hand.add(deck.remove(0));
         }

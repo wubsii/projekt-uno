@@ -2,57 +2,82 @@ import java.util.Scanner;
 
 public class Menu {
 
-        static Scanner scanner = new Scanner(System.in);
-        private static final String RESET = "\u001B[0m";
-        private static final String YELLOW = "\u001B[33m";
+    private final Scanner scanner = new Scanner(System.in);
 
-        private static Player player;
-        private static Game uno;
+    private static final String RESET = "\u001B[0m";
+    private static final String YELLOW = "\u001B[33m";
 
-        public static void setSpieler(Player s) {
-            player = s;
+    private Player player;
+    private Game uno;
+
+    // Konstruktor → sauberer OOP Ansatz
+    public Menu(Game uno, Player player) {
+        this.uno = uno;
+        this.player = player;
+    }
+
+    public void runMenu() {
+
+        // Sicherheitscheck (verhindert Nullpointer)
+        if (uno == null || player == null) {
+            System.out.println("Fehler: Spiel nicht korrekt initialisiert!");
+            return;
         }
 
-        public static void setSpiel(Game spiel) {
-            uno = spiel;
-        }
-
-    public static void runMenu() {
-        Card topCard = uno.getTopCard();
-        Menu.setSpieler(player);
-
-
-        // Karten anzeigen
         player.showCards();
 
         showMenu();
+
         System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
-        int input = scanner.nextInt();
+
+        int input;
+
+        try {
+            input = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Ungültige Eingabe!");
+            scanner.nextLine(); // Buffer reset
+            return;
+        }
+
+        scanner.nextLine(); // Buffer sauber halten
 
         switch (input) {
+
             case 1:
-                // Karte spielen
-                Card played = player.whichCardWouldYouLikeToPlay(topCard);
-                if (played != null) {
-                    uno.setTopCard(played);
-                    System.out.println("Neue Top-Karte: " + played);
-                }
+                playTurn();
                 break;
+
             case 2:
-                System.out.println("WIP");
+                System.out.println("WIP: Punktestand");
                 break;
+
             case 3:
                 showHelp();
                 break;
+
             case 4:
                 if (isExit()) System.exit(0);
                 break;
+
             default:
-                System.out.println(YELLOW + "Ungültige Eingabe, bitte 1 - 4 eingeben: " + RESET);
+                System.out.println("Ungültige Auswahl (1-4)");
         }
     }
 
-        public static void showMenu() {
+    private void playTurn() {
+
+        Card topCard = uno.getTopCard();
+
+        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
+
+        if (played != null) {
+            uno.setTopCard(played);
+            System.out.println("Neue Top-Karte: " + played);
+        }
+    }
+
+        public void showMenu() {
             System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
@@ -61,14 +86,14 @@ public class Menu {
                 4 - Spiel beenden\n""" + RESET);
         }
 
-        public static void showHelp() {
+        public void showHelp() {
             System.out.printf(YELLOW + """
                 WIP
                 """ + RESET);
 
         }
 
-        public static boolean isExit() {
+        public boolean isExit() {
             while (true) {
                 System.out.print(YELLOW + "Willst du das Spiel wirklich beenden? (j/n) " + RESET);
                 String inputExit = scanner.next();
