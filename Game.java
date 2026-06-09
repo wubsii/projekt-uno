@@ -97,6 +97,8 @@ public class Game {
             if (topCard.value == Value.COLOR_CHANGE || topCard.value == Value.PLUS_FOUR) {
                 char chosenColor = cardValue(topCard);
                 topCard.setChosenColor(chosenColor);
+
+                System.out.println("Neue Farbe ist: " + colorName(chosenColor));
             }
 
             switch (topCard.value) {
@@ -222,15 +224,16 @@ public void drawOneCard(Player player) {
 
         switch (topCard.value) {
 
+            // Meldung machen für die anderen Spieler, damit die wissen mit welcher Farbe es weiter geht
             case COLOR_CHANGE:
 
                 System.out.println("""
-                    Welche Farbe wünschst du dir?
-                    r = Rot
-                    g = Grün
-                    b = Blau
-                    y = Gelb
-                    """);
+                        Welche Farbe wünschst du dir?
+                        r = Rot
+                        g = Grün
+                        b = Blau
+                        y = Gelb
+                        """);
 
                 return input.next().toLowerCase().charAt(0);
 
@@ -238,15 +241,14 @@ public void drawOneCard(Player player) {
 
                 System.out.println("+4 Karten!");
                 System.out.println("""
-                    Welche Farbe wünschst du dir?
-                    r = Rot
-                    g = Grün
-                    b = Blau
-                    y = Gelb
-                    """);
+                        Welche Farbe wünschst du dir?
+                        r = Rot
+                        g = Grün
+                        b = Blau
+                        y = Gelb
+                        """);
 
                 return input.next().toLowerCase().charAt(0);
-
             case PLUS_TWO:
 
                 System.out.println("+2 Karten!");
@@ -254,7 +256,6 @@ public void drawOneCard(Player player) {
                 return 'T';
 
             case REVERSE:
-
                 System.out.println("Richtungswechsel!");
 
                 return 'R';
@@ -269,5 +270,15 @@ public void drawOneCard(Player player) {
 
                 return '0';
         }
+    }
+
+    private static String colorName(char color) {
+        return switch (color) {
+            case 'r' -> "Rot";
+            case 'g' -> "Grün";
+            case 'b' -> "Blau";
+            case 'y' -> "Gelb";
+            default -> "Unbekannt";
+        };
     }
 }
