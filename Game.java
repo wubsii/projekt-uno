@@ -7,25 +7,34 @@ public class Game {
     DiscardPile discardPile;
     private static int direction = 1;
     private static Menu menu;
+    // Erstellen unserer Hand, die noch eine Karten hat
+    ArrayList<Card> hand = new ArrayList<>();
 
     public Game(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
 
     public static void initGame() {
+
         DiscardPile discardPile = new DiscardPile();
         Game uno = new Game(discardPile);
 
         uno.shuffle();
 
         Player[] playerListe = new Player[4];
+
         List<String> existingNames = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
+
             playerListe[i] = new Player(uno, discardPile);
             String name = playerListe[i].gettingName(existingNames);
             playerListe[i].setName(name);
             existingNames.add(name);
+        }
+
+        // Karten verteilen
+        for (int i = 0; i < 4; i++) {
             playerListe[i].setHand(uno.dealInitialHand(7));
         }
 
@@ -33,9 +42,11 @@ public class Game {
         int start = playerListe[0].randomizePlayer();
 
         // Startkarte
-        Card startCard = uno.getStartercard(); // Fixed: Use getStartercard()
+        uno.getStartercard();
+        Card startCard = uno.getTopCard();
 
         switch (startCard.value) {
+
             case PLUS_TWO:
                 System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
                 uno.drawOneCard(playerListe[start]);
@@ -45,21 +56,28 @@ public class Game {
             case SKIP:
                 System.out.println(playerListe[start].getName() + " wird übersprungen!");
                 start = (start + 1) % 4;
+
                 break;
 
             case REVERSE:
+
                 direction *= -1;
+
                 break;
         }
 
         while (true) {
+
             Player aktuellerPlayer = playerListe[start];
+
             Menu menu = new Menu(uno, aktuellerPlayer);
             menu.runMenu();
 
             if (aktuellerPlayer.getHand().isEmpty()) {
                 System.out.println(aktuellerPlayer.getName() + " hat das Spiel gewonnen!");
                 GameDatabase db = new GameDatabase();
+
+                // Endpunktestand jedes Spielers in der Datenbank speichern
                 for (Player player : playerListe) {
                     int score = 0;
                     for (Card card : player.getHand()) {
@@ -67,7 +85,10 @@ public class Game {
                     }
                     db.saveFinalScore(player.getName(), score);
                 }
+
+                // Alle gespeicherten Endergebnisse in der Konsole anzeigen
                 db.displayFinalResults();
+
                 break;
             }
 
@@ -79,6 +100,7 @@ public class Game {
             }
 
             switch (topCard.value) {
+
                 case REVERSE:
                     System.out.println("Richtung geändert!");
                     direction *= -1;
