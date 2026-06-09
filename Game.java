@@ -232,14 +232,11 @@ public void drawOneCard(Player player) {
                     y = Gelb
                     """);
 
-                return input.next()
-                        .toLowerCase()
-                        .charAt(0);
+                return input.next().toLowerCase().charAt(0);
 
             case PLUS_FOUR:
 
                 System.out.println("+4 Karten!");
-
                 System.out.println("""
                     Welche Farbe wünschst du dir?
                     r = Rot
@@ -248,9 +245,7 @@ public void drawOneCard(Player player) {
                     y = Gelb
                     """);
 
-                return input.next()
-                        .toLowerCase()
-                        .charAt(0);
+                return input.next().toLowerCase().charAt(0);
 
             case PLUS_TWO:
 

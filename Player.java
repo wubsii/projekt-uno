@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Player {
 
@@ -126,10 +128,12 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public boolean hasPlayableCard(){
-        Card topCard = discardPile.getTopCard();
+    public boolean hasPlayableCard(Card topCard){
+       // Card topCard = discardPile.getTopCard();
         for (Card card : hand) {
-            if (isValidMove(card, topCard)) return true;
+            if (isValidMove(card, topCard)) {
+                return true;
+            }
         }
         return false;
     }
@@ -145,10 +149,10 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             }
 
         // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
-        if (!hasPlayableCard()) {
+        if (!hasPlayableCard(topCard)) {
             game.drawOneCard(this); // Pass the current player
             System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
-            if (!hasPlayableCard()) {
+            if (!hasPlayableCard(topCard)) {
                 System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
                 return null;
             } else {
@@ -159,38 +163,38 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             }
         }
 
-            System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
+        System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
+        String choice = input.next().toLowerCase();
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(choice);
+        int choiceNumber = 0;
+        if (matcher.find()) {
+            String numberStr = matcher.group();
+            choiceNumber = Integer.parseInt(numberStr);
+            System.out.println(choiceNumber);
+        }
 
-            int choiceNumber = input.nextInt();
+        input.nextLine(); // Buffer leeren
 
-            input.nextLine(); // Buffer leeren
+        // prüfen ob Auswahl gültig ist
+        if (choiceNumber < 1 || choiceNumber > hand.size()) {
+            System.out.println("Ungültige Auswahl!");
+            return null;
+        }
 
-            // prüfen ob Auswahl gültig ist
-            if (choiceNumber < 1 || choiceNumber > hand.size()) {
-                System.out.println("Ungültige Auswahl!");
-                return null;
-            }
+        Card selectedCard = hand.get(choiceNumber - 1);
 
-            Card selectedCard = hand.get(choiceNumber - 1);
-
-            // prüfen ob Karte spielbar ist
-            if (isValidMove(selectedCard, topCard)) {
-
-                hand.remove(choiceNumber - 1);
-
-                System.out.println("Du hast gespielt: " + selectedCard);
-
-                discardPile.addCard(selectedCard);
-
-                return selectedCard;
-            }
-            else {
+        // prüfen ob Karte spielbar ist
+        if (isValidMove(selectedCard, topCard)) {
+            hand.remove(choiceNumber - 1);
+            System.out.println("Du hast gespielt: " + selectedCard);
+            discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
+            return selectedCard;
+        } else {
 
                 System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte:");
                 game.drawOneCard(this); // Pass the current player
                 return null;
-
-
             }
         }
 
