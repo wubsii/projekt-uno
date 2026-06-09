@@ -87,6 +87,21 @@ public class Game {
                 System.out.println(
                         aktuellerPlayer.getName() + " hat das Spiel gewonnen!");
 
+                // Datenbankverbindung oeffnen und Tabelle erstellen falls noetig
+                GameDatabase db = new GameDatabase();
+
+                // Endpunktestand jedes Spielers in der Datenbank speichern
+                for (Player player : playerListe) {
+                    int score = 0;
+                    for (Card card : player.getHand()) {
+                        score += card.getPointValue();
+                    }
+                    db.saveFinalScore(player.getName(), score);
+                }
+
+                // Alle gespeicherten Endergebnisse in der Konsole anzeigen
+                db.displayFinalResults();
+
                 break;
             }
 
@@ -281,34 +296,4 @@ public class Game {
                 return '0';
         }
     }
-
-
-
 }
-
-//Und hier noch einmal das Verwendungsbeispiel, damit der die Spiel-Klasse schreibt
-// genau weiß, wie er den Punktenrechner einbinden soll:
-
-// Zu Beginn des Spiels – alle Spieler-Objekte erstellen
-//Spieler anna  = new Spieler(discardPile);
-//Spieler ben   = new Spieler(discardPile);
-//Spieler clara = new Spieler(discardPile);
-//
-//anna.setName("Anna");
-//ben.setName("Ben");
-//clara.setName("Clara");
-//
-/// / Punktenrechner mit Spieler-Objekten starten
-//List<Spieler> alleSpieler = List.of(anna, ben, clara);
-//Punktenrechner rechner = new Punktenrechner(alleSpieler);
-//
-//// Nach jeder Runde – Sieger und Verlierer als Spieler-Objekte übergeben
-//List<Spieler> verlierer = List.of(ben, clara);
-//rechner.rundeAbrechnen(anna, verlierer);
-//rechner.punktestandAnzeigen();
-//
-//// Prüfen ob das Spiel vorbei ist
-//String sieger = rechner.spielsiegerErmitteln();
-//if (sieger != null) {
-//    System.out.println("Spielende! Gesamtsieger: " + sieger);
-//}

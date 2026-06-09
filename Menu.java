@@ -49,7 +49,9 @@ public class Menu {
                 break;
 
             case 2:
-                System.out.println("WIP: Punktestand");
+                // Datenbankverbindung oeffnen und Endergebnisse anzeigen
+                GameDatabase db = new GameDatabase();
+                db.displayFinalResults();
                 break;
 
             case 3:
@@ -81,7 +83,7 @@ public class Menu {
             System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
-                2 - Punktestand anzeigen
+                2 - Endergebnisse anzeigen
                 3 - Hilfe
                 4 - Spiel beenden\n""" + RESET);
         }
