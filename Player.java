@@ -12,8 +12,9 @@ public class Player {
     //Player[] playerListe = new Player[4];
     private Game game;
 
-    public Player(Game game) {
+    public Player(Game game, DiscardPile discardPile) {
         this.game = game;
+        this.discardPile = discardPile;
     }
 
   /*
@@ -145,14 +146,12 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
         // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
         if (!hasPlayableCard()) {
-            game.drawOneCard();
+            game.drawOneCard(this); // Pass the current player
             System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
             if (!hasPlayableCard()) {
                 System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
-                return null; // End turn
-                // endTurn(); <-- nächster Spieler kommt dran, muss noch implementiert werden
+                return null;
             } else {
-                // Show the updated hand (including the new card)
                 System.out.println("Deine Karten nach dem Ziehen:");
                 for (int i = 0; i < hand.size(); i++) {
                     System.out.println((i + 1) + ": " + hand.get(i));
@@ -188,17 +187,19 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             else {
 
                 System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte:");
-                game.drawOneCard();
+                game.drawOneCard(this); // Pass the current player
                 return null;
+
+
             }
         }
 
-    public void declareUNO(String input){
+    public void declareUNO(String input) {
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
         } else if (hand.size() == 1 && (!input.contains("uno"))) {
             System.out.println("Du hast vergessen, UNO zu rufen und bekommst eine Strafkarte.");
-            game.drawOneCard();
+            game.drawOneCard(this); // Pass the current player
         }
     }
 
@@ -239,10 +240,6 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
 
         return false;
-    }
-    
-    public Player(DiscardPile discardPile) {
-        this.discardPile = discardPile;
     }
 
     public void setHand(ArrayList<Card> hand) {

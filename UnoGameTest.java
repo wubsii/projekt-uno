@@ -18,7 +18,7 @@ public class UnoGameTest {
     void setUp() {
         discardPile = new DiscardPile();
         game = new Game(discardPile);
-        player = new Player(discardPile);
+        player = new Player(game, discardPile);
     }
 
     // =========================================================
