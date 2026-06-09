@@ -10,7 +10,11 @@ public class Player {
     private DiscardPile discardPile;
     ArrayList<Card> hand = new ArrayList<>();
     //Player[] playerListe = new Player[4];
+    private Game game;
 
+    public Player(Game game) {
+        this.game = game;
+    }
 
   /*
 Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
@@ -121,34 +125,16 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public boolean hasPlayableCard(Card topCard) {
-
+    public boolean hasPlayableCard(){
+        Card topCard = discardPile.getTopCard();
         for (Card card : hand) {
-
-            if (isValidMove(card, topCard)) {
-                return true;
-            }
+            if (isValidMove(card, topCard)) return true;
         }
-
         return false;
     }
 
 
     public Card whichCardWouldYouLikeToPlay(Card topCard, Game game) {
-        if (!hasPlayableCard(topCard)) {
-
-            System.out.println(
-                    "Keine passende Karte vorhanden.");
-
-            Card gezogeneKarte = game.dealInitialHand(1).get(0);
-
-            hand.add(gezogeneKarte);
-
-            System.out.println(
-                    "Du ziehst: " + gezogeneKarte);
-
-            return null;
-        }
 
         // Karten anzeigen
         // System.out.println(hand);
@@ -156,6 +142,23 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             for (int i = 0; i < hand.size(); i++) {
                 System.out.println((i + 1) + ": " + hand.get(i));
             }
+
+        // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
+        if (!hasPlayableCard()) {
+            game.drawOneCard();
+            System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
+            if (!hasPlayableCard()) {
+                System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
+                return null; // End turn
+                // endTurn(); <-- nächster Spieler kommt dran, muss noch implementiert werden
+            } else {
+                // Show the updated hand (including the new card)
+                System.out.println("Deine Karten nach dem Ziehen:");
+                for (int i = 0; i < hand.size(); i++) {
+                    System.out.println((i + 1) + ": " + hand.get(i));
+                }
+            }
+        }
 
             System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
 
@@ -193,8 +196,8 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             }
             else {
 
-                System.out.println("Diese Karte darfst du nicht spielen!");
-
+                System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte:");
+                game.drawOneCard();
                 return null;
             }
         }
@@ -202,6 +205,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public void declareUNO(String input){
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
+        } else if (hand.size() == 1 && (!input.contains("uno"))) {
+            System.out.println("Du hast vergessen, UNO zu rufen und bekommst eine Strafkarte.");
+            game.drawOneCard();
         }
     }
 

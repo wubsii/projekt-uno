@@ -7,7 +7,8 @@ public class Game {
     DiscardPile discardPile;
     private static int direction = 1;
     private static Menu menu;
-
+    // Erstellen unserer Hand, die noch eine Karten hat
+    ArrayList<Card> hand = new ArrayList<>();
 
     public Game(DiscardPile discardPile) {
         this.discardPile = discardPile;
@@ -168,9 +169,6 @@ public class Game {
 
     public ArrayList<Card> dealInitialHand(int anzahl) {
 
-        // Erstellen unserer Hand, die noch eine Karten hat
-        ArrayList<Card> hand = new ArrayList<>();
-
         // Schleife die 7 mal durchgeht, damit wir unsere Karten in die Hand bekommen
         for (int i = 0; i < anzahl; i++) {
             if (deck.isEmpty()) {
@@ -190,8 +188,7 @@ public class Game {
         return hand;
     }
 
-    // NOCH NICHT FERTIG: Methode, wo Karten im Laufe des Spiels gezogen werden
-    public void drawCards(int amount) {
+    public void drawOneCard() {
         // Karten vom Ablegestapel mischen und hinzufügen, wenn Deck weniger als 4 Karten hat
         if (deck.size() < 4) {
 
@@ -201,6 +198,8 @@ public class Game {
 
             shuffle();
         }
+        // Hinzufügen einer Karte in unsere Hand (Entfernen einer Karte vom Deck [nimmt von ganz oben])
+        hand.add(deck.remove(0));
     }
 
     public void setTopCard(Card card) {
