@@ -9,11 +9,13 @@ public class Menu {
 
     private Player player;
     private Game uno;
+    private Help help;
 
     // Konstruktor → sauberer OOP Ansatz
-    public Menu(Game uno, Player player) {
+    public Menu(Game uno, Player player, Help help) {
         this.uno = uno;
         this.player = player;
+        this.help = help;
     }
 
     public void runMenu() {
@@ -55,7 +57,7 @@ public class Menu {
                 break;
 
             case 3:
-                showHelp();
+                Help.showRulesInFile();
                 break;
 
             case 4:
@@ -86,13 +88,6 @@ public class Menu {
                 2 - Endergebnisse anzeigen
                 3 - Hilfe
                 4 - Spiel beenden\n""" + RESET);
-        }
-
-        public void showHelp() {
-            System.out.printf(YELLOW + """
-                WIP
-                """ + RESET);
-
         }
 
         public boolean isExit() {

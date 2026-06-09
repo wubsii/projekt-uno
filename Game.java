@@ -7,6 +7,7 @@ public class Game {
     DiscardPile discardPile;
     private static int direction = 1;
     private static Menu menu;
+    private static Help help;
     // Erstellen unserer Hand, die noch eine Karten hat
     ArrayList<Card> hand = new ArrayList<>();
 
@@ -70,7 +71,7 @@ public class Game {
 
             Player aktuellerPlayer = playerListe[start];
 
-            Menu menu = new Menu(uno, aktuellerPlayer);
+            Menu menu = new Menu(uno, aktuellerPlayer, help);
             menu.runMenu();
 
             if (aktuellerPlayer.getHand().isEmpty()) {

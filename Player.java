@@ -188,6 +188,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         if (isValidMove(selectedCard, topCard)) {
             hand.remove(choiceNumber - 1);
             System.out.println("Du hast gespielt: " + selectedCard);
+            declareUNO(choice);
             discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
             return selectedCard;
         } else {
@@ -196,6 +197,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
                 game.drawOneCard(this); // Pass the current player
                 return null;
             }
+
         }
 
     public void declareUNO(String input) {

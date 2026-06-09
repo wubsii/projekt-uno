@@ -37,9 +37,9 @@ Das Projekt beinhaltet mehrere Klassen:
 
 ## <span style="color:green">Gruppenaufteilung/Unser Team</span>
 
-- Arnela: Anforderungen
-- Magdalena: Spielerinteraktionen
-- Stefanie: Karten- und Deckerstellung
+- Arnela: Anforderungen, Datenbank und Punkteverwaltung
+- Magdalena: Spielerinteraktionen, Spielablauf
+- Stefanie: Karten- und Deckerstellung, Menü inkl. Hilfe, ReadMe
 
 ## <span style="color:red">Verbesserungsvorschläge</span>
 
