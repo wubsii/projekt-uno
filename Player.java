@@ -102,11 +102,11 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
     public ArrayList<Card> playerHand(Game uno) {
         hand = uno.dealInitialHand(7);
-
         System.out.println("Du (" + name + ") hast folgende Karten:");
         for (Card c : hand) {
-            c.print();
+            System.out.println(c + " ");
         }
+
 
         return hand;
     }
@@ -119,10 +119,12 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         char showMe = input.next().charAt(0);
 
         if (showMe == 'j' || showMe == 'J') {
+            System.out.println("-----------------------------------------------");
             System.out.println("Du (" + name + ") hast folgende Karten:");
             for (Card c : hand) {
-                c.print();
+                System.out.print(c + " ");
             }
+            System.out.println("\n-----------------------------------------------");
         } else {
             System.out.println("Bitte bestätige mit 'j', um fortzufahren.");
         }

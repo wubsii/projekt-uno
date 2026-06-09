@@ -15,6 +15,25 @@ public enum Value {
     COLOR_CHANGE(50),
     PLUS_FOUR(50);
 
+    @Override
+    public String toString() {
+        switch (this) {
+            case ONE:      return "1";
+            case TWO:      return "2";
+            case THREE:    return "3";
+            case FOUR:     return "4";
+            case FIVE:     return "5";
+            case SIX:      return "6";
+            case SEVEN:    return "7";
+            case EIGHT:    return "8";
+            case NINE:     return "9";
+            case SKIP:     return "Skip";
+            case PLUS_TWO: return "+2";
+            // Add other cases as needed
+            default:       return name(); // Fallback
+        }
+    }
+
     // Jeder Value-Wert erhält eine feste Punktzahl
     private final int pointValue;
 

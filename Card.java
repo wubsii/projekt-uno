@@ -1,22 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Card {
-    //    String farbe;
-//    String wert;
-//
-//    // Constructor der Karten, wo die Werte von der Klasse SPIEL.java genommen werden und in die Variablen in der Klasse CARD.java gespeichert werden ....
-//    public Card(String farbe, String wert) {
-//        this.farbe = farbe;
-//        this.wert = wert;
-//    }
-//
-    // ... damit wir sie mit der methode PRINT() ausgeben können
-    public void print() {
-        System.out.println(color + " " + value);
-    }
-
     public Value value;
     public Color color;
 
@@ -25,28 +10,41 @@ public class Card {
         color = c;
     }
 
-    // Gibt einfach den Wert der Enumeration zurück
     public int getPointValue() {
         return value.getPointValue();
     }
 
-        public static List<Card> makeDeck () {
-            List<Card> deck = new ArrayList<Card>();
-            for (Color c : Color.values()) {
-                for (Value v : Value.values()) {
-                    deck.add(new Card(v, c));
-                }
+    public static List<Card> makeDeck() {
+        List<Card> deck = new ArrayList<>();
+        for (Color c : Color.values()) {
+            for (Value v : Value.values()) {
+                deck.add(new Card(v, c));
             }
-            return deck;
         }
+        return deck;
+    }
 
-        // Override für die ausgabe der Karten
-        @Override
-        public String toString () {
-            return color + " " + value;
+    // Override toString to return colored output in the format | value |
+    @Override
+    public String toString() {
+        String ansiColor = getAnsiColor(color);
+        String reset = "\u001B[0m";
+        return ansiColor + "| " + value.toString().toLowerCase() + " |" + reset;
+    }
+
+    // Helper method to get ANSI color code for a given Color
+    private String getAnsiColor(Color color) {
+        switch (color) {
+            case RED:    return "\u001B[31m"; // Red
+            case BLUE:   return "\u001B[34m"; // Blue
+            case GREEN:  return "\u001B[32m"; // Green
+            case YELLOW: return "\u001B[33m"; // Yellow
+            case BLACK:  return "\u001B[37m"; // White (default)
+            default:     return "\u001B[37m"; // White (default)
         }
+    }
 
-
+    // Getters and setters
     private char chosenColor;
 
     public void setChosenColor(char color) {
@@ -73,35 +71,3 @@ public class Card {
         this.color = color;
     }
 }
-
-
-    //toString-Methode für Ausgabe von buntem Text für die Karten:
-
-//    @Override
-//    public String toString() {
-//        String ansiColor = "";
-//
-//        switch (color) {
-//            case RED:
-//                ansiColor = "\u001B[31m";
-//                break;
-//            case BLUE:
-//                ansiColor = "\u001B[34m";
-//                break;
-//            case GREEN:
-//                ansiColor = "\u001B[32m";
-//                break;
-//            case YELLOW:
-//                ansiColor = "\u001B[33m";
-//                break;
-//            case BLACK:
-//                ansiColor = "\u001B[37m"; // or keep default
-//                break;
-//        }
-//
-//        String reset = "\u001B[0m";
-//
-//        return ansiColor + "[" + color + " " + value + "]" + reset;
-//    }
-
-

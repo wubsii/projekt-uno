@@ -82,6 +82,7 @@ public class Menu {
     }
 
         public void showMenu() {
+            System.out.println();
             System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
