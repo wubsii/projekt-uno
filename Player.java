@@ -2,17 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Spieler {
+public class Player {
 
     Scanner input = new Scanner(System.in);
     String name;
     private DiscardPile discardPile;
-    Spiel uno = new Spiel(discardPile);
     ArrayList<Card> hand = new ArrayList<>();
-    Spieler[] spielerListe = new Spieler[4];
+    //Player[] playerListe = new Player[4];
 
 
   /*
@@ -63,18 +60,18 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public void createPlayers() {
-
-        List<String> vorhandeneNamen = new ArrayList<>();
-
-        // Spieler erstellen
-        for (int i = 0; i < 4; i++) {
-            spielerListe[i] = new Spieler(discardPile);
-            String name = spielerListe[i].gettingName(vorhandeneNamen);
-            spielerListe[i].setName(name);
-            vorhandeneNamen.add(name);
-        }
-    }
+//    public void createPlayers() {
+//
+//        List<String> vorhandeneNamen = new ArrayList<>();
+//
+//        // Spieler erstellen
+//        for (int i = 0; i < 4; i++) {
+//            playerListe[i] = new Player(discardPile);
+//            String name = playerListe[i].gettingName(vorhandeneNamen);
+//            playerListe[i].setName(name);
+//            vorhandeneNamen.add(name);
+//        }
+//    }
 
     public String[] showOrder(String[] playerName, int start) {
         String[] neueReihenfolge = new String[4];
@@ -96,8 +93,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     }
 
 
-    public ArrayList<Card> playerHand() {
-      //  uno.shuffle();
+    public ArrayList<Card> playerHand(Game uno) {
         hand = uno.dealInitialHand(7);
 
         System.out.println("Du (" + name + ") hast folgende Karten:");
@@ -125,74 +121,87 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
+    public boolean hasPlayableCard(Card topCard) {
 
-    public Card whichCardWouldYouLikeToPlay(Card topCard) {
+        for (Card card : hand) {
+
+            if (isValidMove(card, topCard)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public Card whichCardWouldYouLikeToPlay(Card topCard, Game game) {
+        if (!hasPlayableCard(topCard)) {
+
+            System.out.println(
+                    "Keine passende Karte vorhanden.");
+
+            Card gezogeneKarte = game.dealInitialHand(1).get(0);
+
+            hand.add(gezogeneKarte);
+
+            System.out.println(
+                    "Du ziehst: " + gezogeneKarte);
+
+            return null;
+        }
 
         // Karten anzeigen
         // System.out.println(hand);
         // System.out.println("HAND SIZE: " + hand.size());
-        for (int i = 0; i < hand.size(); i++) {
-            System.out.println((i + 1) + ": " + hand.get(i));
-        }
+            for (int i = 0; i < hand.size(); i++) {
+                System.out.println((i + 1) + ": " + hand.get(i));
+            }
 
-        // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
-        if (!hasPlayableCard()) {
-            uno.drawOneCard();
-            System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
-            if (!hasPlayableCard()) {
-                System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
+            System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
+
+            int choiceNumber = input.nextInt();
+
+            input.nextLine(); // Buffer leeren
+
+            // prüfen ob Auswahl gültig ist
+            if (choiceNumber < 1 || choiceNumber > hand.size()) {
+                System.out.println("Ungültige Auswahl!");
                 return null;
-                // endTurn(); <-- nächster Spieler kommt dran, muss noch implementiert werden
-            } else {
-                System.out.println("Deine Karten nach dem Ziehen:");
-                for (int i = 0; i < hand.size(); i++) {
-                    System.out.println((i + 1) + ": " + hand.get(i));
+            }
+
+            Card selectedCard = hand.get(choiceNumber - 1);
+
+            // prüfen ob Karte spielbar ist
+            if (isValidMove(selectedCard, topCard)) {
+
+                hand.remove(choiceNumber - 1);
+
+                System.out.println("Du hast gespielt: " + selectedCard);
+
+                discardPile.addCard(selectedCard);
+
+                if (hand.size() == 1) {
+
+                    System.out.print("Du hast nur noch eine Karte! Sage UNO: ");
+
+                    String unoInput = input.next();
+
+                    declareUNO(unoInput);
                 }
+
+                return selectedCard;
+            }
+            else {
+
+                System.out.println("Diese Karte darfst du nicht spielen!");
+
+                return null;
             }
         }
-
-
-        System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
-        String choice = input.next().toLowerCase();
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(choice);
-
-        int choiceNumber = 0;
-        if (matcher.find()) {
-            String numberStr = matcher.group();
-            choiceNumber = Integer.parseInt(numberStr);
-            System.out.println(choiceNumber);
-        }
-
-        input.nextLine(); // Buffer leeren
-
-        // prüfen ob Auswahl gültig ist
-        if (choiceNumber < 1 || choiceNumber > hand.size()) {
-            System.out.println("Ungültige Auswahl!");
-            return null;
-        }
-
-        Card selectedCard = hand.get(choiceNumber - 1);
-
-        // prüfen ob Karte spielbar ist
-        if (isValidMove(selectedCard, topCard)) {
-            hand.remove(choiceNumber - 1);
-            System.out.println("Du hast gespielt: " + selectedCard);
-            discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
-            return selectedCard;
-        } else {
-            System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte.");
-            uno.drawOneCard();
-            return null;
-        }
-    }
 
     public void declareUNO(String input){
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
-        } else if ((hand.size() == 1 && !input.contains("uno"))) {
-            System.out.println("Du hast vergessen, UNO zu sagen und musst eine Strafkarte ziehen!");
-            uno.drawOneCard();
         }
     }
 
@@ -201,6 +210,25 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         //Abfrage ob die Karte die man drauflegt die gleiche Farbe hat
         if (playedCard.color == topCard.color) {
             return true;
+        }
+
+        if (topCard.color == Color.BLACK &&
+                topCard.getChosenColor() != '\0') {
+
+            switch (topCard.getChosenColor()) {
+
+                case 'r':
+                    return playedCard.color == Color.RED;
+
+                case 'g':
+                    return playedCard.color == Color.GREEN;
+
+                case 'b':
+                    return playedCard.color == Color.BLUE;
+
+                case 'y':
+                    return playedCard.color == Color.YELLOW;
+            }
         }
 
         // Abfrage ob die Karte die man drauflegt den gleicher Wert hat
@@ -215,29 +243,8 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
         return false;
     }
-
-    public boolean hasPlayableCard(){
-        Card topCard = discardPile.getTopCard();
-        for (Card card : hand) {
-            if (isValidMove(card, topCard)) return true;
-        }
-        return false;
-    }
-
-    // DARF KEINE BLACK CARD SEIN
-    public Card getStartercard() {
-        Card topCard;
-
-        do {
-            uno.shuffle();
-            topCard = uno.dealInitialHand(1).get(0);
-        } while (topCard.color == Color.BLACK);
-
-        System.out.println("Startkarte ist: " + topCard);
-        return topCard;
-    }
-
-    public Spieler(DiscardPile discardPile) {
+    
+    public Player(DiscardPile discardPile) {
         this.discardPile = discardPile;
     }
 
@@ -252,4 +259,7 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public String getName() {
         return name;
     }
-}
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }}

@@ -26,8 +26,8 @@ public class Card {
     }
 
     // Gibt einfach den Wert der Enumeration zurück
-    public int getPunktwert() {
-        return value.getPunktwert();
+    public int getPointValue() {
+        return value.getPointValue();
     }
 
         public static List<Card> makeDeck () {
@@ -45,7 +45,34 @@ public class Card {
         public String toString () {
             return color + " " + value;
         }
+
+
+    private char chosenColor;
+
+    public void setChosenColor(char color) {
+        this.chosenColor = color;
     }
+
+    public char getChosenColor() {
+        return chosenColor;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+}
 
 
     //toString-Methode für Ausgabe von buntem Text für die Karten:

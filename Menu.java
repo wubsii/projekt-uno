@@ -2,85 +2,110 @@ import java.util.Scanner;
 
 public class Menu {
 
-    static Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+
     private static final String RESET = "\u001B[0m";
     private static final String YELLOW = "\u001B[33m";
 
-    private static Spieler spieler;
-    private static Spiel uno;
+    private Player player;
+    private Game uno;
 
-    public static void setSpieler(Spieler s) {
-        spieler = s;
+    // Konstruktor → sauberer OOP Ansatz
+    public Menu(Game uno, Player player) {
+        this.uno = uno;
+        this.player = player;
     }
 
-    public static void setSpiel(Spiel spiel) {
-        uno = spiel;
-    }
+    public void runMenu() {
 
-    public static void runMenu() {
-        Menu.setSpieler(spieler);
-        Card topCard = uno.getTopCard();
+        // Sicherheitscheck (verhindert Nullpointer)
+        if (uno == null || player == null) {
+            System.out.println("Fehler: Spiel nicht korrekt initialisiert!");
+            return;
+        }
 
-        // Karten anzeigen
-        spieler.showCards();
-        while (true) {
-            showMenu();
-            System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
-            int input = scanner.nextInt();
+        player.showCards();
 
-            switch (input) {
-                case 1:
-                    // Karte spielen
-                    Card played = spieler.whichCardWouldYouLikeToPlay(topCard);
-                    if (played != null) {
-                        uno.setTopCard(played);
-                        System.out.println("Neue Top-Karte: " + played);
-                    }
-                    break;
-                case 2:
-                    System.out.println("WIP");
-                    break;
-                case 3:
-                    showHelp();
-                    break;
-                case 4:
-                    if (isExit()) System.exit(0);
-                    break;
-                default:
-                    System.out.println(YELLOW + "Ungültige Eingabe, bitte 1 - 4 eingeben: " + RESET);
-            }
+        showMenu();
+
+        System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
+
+        int input;
+
+        try {
+            input = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Ungültige Eingabe!");
+            scanner.nextLine(); // Buffer reset
+            return;
+        }
+
+        scanner.nextLine(); // Buffer sauber halten
+
+        switch (input) {
+
+            case 1:
+                playTurn();
+                break;
+
+            case 2:
+                System.out.println("WIP: Punktestand");
+                break;
+
+            case 3:
+                showHelp();
+                break;
+
+            case 4:
+                if (isExit()) System.exit(0);
+                break;
+
+            default:
+                System.out.println("Ungültige Auswahl (1-4)");
         }
     }
 
-    public static void showMenu() {
-        System.out.printf(YELLOW + """
+    private void playTurn() {
+
+        Card topCard = uno.getTopCard();
+
+        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
+
+        if (played != null) {
+            uno.setTopCard(played);
+            System.out.println("Neue Top-Karte: " + played);
+        }
+    }
+
+        public void showMenu() {
+            System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
                 2 - Punktestand anzeigen
                 3 - Hilfe
                 4 - Spiel beenden\n""" + RESET);
-    }
+        }
 
-    public static void showHelp() {
-        System.out.printf(YELLOW + """
+        public void showHelp() {
+            System.out.printf(YELLOW + """
                 WIP
                 """ + RESET);
 
-    }
+        }
 
-    public static boolean isExit() {
-        while (true) {
-            System.out.print(YELLOW + "Willst du das Spiel wirklich beenden? (j/n) " + RESET);
-            String inputExit = scanner.next();
-            if (inputExit.equals("n")) {
-                return false;
-            } else if (inputExit.equals("j")) {
-                return true;
-            } else {
-                System.out.println(YELLOW + "Ungültige Eingabe, bitte j/n eingeben: " + RESET);
-                continue;
+        public boolean isExit() {
+            while (true) {
+                System.out.print(YELLOW + "Willst du das Spiel wirklich beenden? (j/n) " + RESET);
+                String inputExit = scanner.next();
+                if (inputExit.equals("n")) {
+                    return false;
+                } else if (inputExit.equals("j")) {
+                    return true;
+                } else {
+                    System.out.println(YELLOW + "Ungültige Eingabe, bitte j/n eingeben: " + RESET);
+                    continue;
+                }
             }
         }
-    }
 
 }
