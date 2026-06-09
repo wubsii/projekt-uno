@@ -135,6 +135,22 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             System.out.println((i + 1) + ": " + hand.get(i));
         }
 
+        // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
+        if (!hasPlayableCard()) {
+            uno.drawOneCard();
+            System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
+            if (!hasPlayableCard()) {
+                System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
+                return null;
+                // endTurn(); <-- nächster Spieler kommt dran, muss noch implementiert werden
+            } else {
+                System.out.println("Deine Karten nach dem Ziehen:");
+                for (int i = 0; i < hand.size(); i++) {
+                    System.out.println((i + 1) + ": " + hand.get(i));
+                }
+            }
+        }
+
 
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
         String choice = input.next().toLowerCase();
@@ -165,7 +181,8 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
             return selectedCard;
         } else {
-            System.out.println("Diese Karte darfst du nicht spielen!");
+            System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte.");
+            uno.drawOneCard();
             return null;
         }
     }
@@ -173,6 +190,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
     public void declareUNO(String input){
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
+        } else if ((hand.size() == 1 && !input.contains("uno"))) {
+            System.out.println("Du hast vergessen, UNO zu sagen und musst eine Strafkarte ziehen!");
+            uno.drawOneCard();
         }
     }
 
@@ -193,6 +213,14 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
             return true;
         }
 
+        return false;
+    }
+
+    public boolean hasPlayableCard(){
+        Card topCard = discardPile.getTopCard();
+        for (Card card : hand) {
+            if (isValidMove(card, topCard)) return true;
+        }
         return false;
     }
 

@@ -5,9 +5,12 @@ import java.util.Random;
 
 public class Spiel {
 
-    List<Card> deck = Deck.makeDeck();
+    static List<Card> deck = Deck.makeDeck();
     private Card topCard;
     DiscardPile discardPile;
+
+    // Erstellen unserer Hand, die noch eine Karten hat
+    ArrayList<Card> hand = new ArrayList<>();
 
     public Spiel(DiscardPile discardPile) {
         this.discardPile = discardPile;
@@ -91,9 +94,6 @@ public class Spiel {
 
     public ArrayList<Card> dealInitialHand(int anzahl) {
 
-        // Erstellen unserer Hand, die noch eine Karten hat
-        ArrayList<Card> hand = new ArrayList<>();
-
         // Schleife die 7 mal durchgeht, damit wir unsere Karten in die Hand bekommen
         for (int i = 0; i < anzahl; i++) {
             // Hinzufügen einer Karte in unsere Hand (Entfernen einer Karte vom Deck [nimmt von ganz oben])
@@ -104,8 +104,8 @@ public class Spiel {
         return hand;
     }
 
-    // NOCH NICHT FERTIG: Methode, wo Karten im Laufe des Spiels gezogen werden
-    public void drawCards(int amount) {
+    // Methode, wo Karten im Laufe des Spiels gezogen werden
+    public void drawOneCard() {
         // Karten vom Ablegestapel mischen und hinzufügen, wenn Deck weniger als 4 Karten hat
         if (deck.size() < 4) {
 
@@ -115,6 +115,9 @@ public class Spiel {
 
             shuffle();
         }
+
+        // Karten ziehen
+        hand.add(deck.remove(0));
     }
 
     public void setTopCard(Card card) {
