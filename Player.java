@@ -180,15 +180,6 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
 
                 discardPile.addCard(selectedCard);
 
-                if (hand.size() == 1) {
-
-                    System.out.print("Du hast nur noch eine Karte! Sage UNO: ");
-
-                    String unoInput = input.next();
-
-                    declareUNO(unoInput);
-                }
-
                 return selectedCard;
             }
             else {
