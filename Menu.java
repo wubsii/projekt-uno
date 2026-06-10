@@ -10,7 +10,7 @@ public class Menu {
     private final Game uno;
 
     // Konstruktor
-    public Menu(Game uno, Player player, Help help) {
+    public Menu(Game uno, Player player) {
         this.uno = uno;
         this.player = player;
     }
@@ -25,7 +25,7 @@ public class Menu {
         }
         player.showCards();
         showMenu();
-        System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
+        System.out.print(YELLOW + "\nGib deine Wahl ein (1-4): " + RESET);
 
         int input;
         try {
