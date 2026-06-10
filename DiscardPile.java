@@ -12,7 +12,7 @@ public class DiscardPile {
         pile.add(card);
     }
 
-    // Gibt die oberste Karte des Stapels zurück.
+    // Testmethode: Gibt die oberste Karte des Stapels zurück.
     public Card getTopCard() {
         if (pile.isEmpty()) {
             return null;

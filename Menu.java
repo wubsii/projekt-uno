@@ -10,61 +10,99 @@ public class Menu {
     private final Game uno;
 
     // Konstruktor
-    public Menu(Game uno, Player player, Help help) {
+    public Menu(Game uno, Player player) {
         this.uno = uno;
         this.player = player;
     }
 
     // Führt die Hauptmenüschleife aus: Zeigt Optionen an und verarbeitet die Benutzereingabe
     // Behandelt ungültige Eingaben und delegiert an die entsprechenden Methoden
-    public void runMenu() {
-        // Sicherheitscheck (verhindert Nullpointer)
+    public Card runMenu() {
+
+        // Sicherheitscheck: verhindert NullPointerException, falls Spiel nicht korrekt initialisiert wurde
         if (uno == null || player == null) {
             System.out.println("Fehler: Spiel nicht korrekt initialisiert!");
-            return;
+            return null;
         }
+
+        // zeigt die Handkarten des aktuellen Spielers (nur für diesen Spieler sichtbar gedacht)
         player.showCards();
+
+        // zeigt das Menü mit den verfügbaren Aktionen
         showMenu();
-        System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
+
+        // Eingabeaufforderung für den Spieler
+        System.out.print(YELLOW + "\nGib deine Wahl ein (1-4): " + RESET);
 
         int input;
+
         try {
+            // liest die Menüauswahl ein
             input = scanner.nextInt();
         } catch (Exception e) {
+            // falls keine gültige Zahl eingegeben wurde
             System.out.println("Ungültige Eingabe!");
-            scanner.nextLine(); // Buffer reset
-            return;
+            scanner.nextLine(); // Buffer leeren
+            return runMenu();   // Menü erneut anzeigen
         }
-        scanner.nextLine(); // Buffer sauber halten
+
+        scanner.nextLine(); // restliche Eingabe aus dem Buffer entfernen
+
+        // verarbeitet die Menüauswahl
         switch (input) {
+
             case 1:
-                playTurn();
-                break;
+                // Spieler führt einen normalen Spielzug aus
+                return playTurn();
+
             case 2:
-                // Datenbankverbindung oeffnen und Endergebnisse anzeigen
+                // zeigt den aktuellen Punktestand aus der Datenbank an
                 GameDatabase db = new GameDatabase();
                 db.displayFinalResults();
-                break;
+
+                // danach zurück ins Menü, damit der Spieler weiter spielen kann
+                return runMenu();
+
             case 3:
+                // zeigt die Spielregeln an
                 Help.showRulesInFile();
-                break;
+
+                // danach wieder ins Menü zurückkehren
+                return runMenu();
+
             case 4:
+                // fragt nach Bestätigung und beendet ggf. das Spiel
                 if (isExit()) System.exit(0);
-                break;
+                return null;
+
             default:
+                // falls Eingabe nicht zwischen 1–4 liegt
                 System.out.println("Ungültige Auswahl (1-4)");
+
+                // Menü erneut anzeigen
+                return runMenu();
         }
     }
 
-    // Führt einen Spielzug aus: Der Spieler wählt eine Karte, die auf die oberste Karte gelegt wird
-    private void playTurn() {
-        Card topCard = uno.getTopCard();
-        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
+    // Führt einen Spielzug aus und gibt die gespielte Karte zurück
+    public Card playTurn() {
 
-        if (played != null) {
-            uno.setTopCard(played);
-            System.out.println("Neue Top-Karte: " + played);
+        Card topCard = uno.getTopCard();
+
+        // Sicherheitscheck
+        if (topCard == null) {
+            System.out.println("Fehler: Keine Startkarte gesetzt!");
+            return null;
         }
+        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
+        if (played == null) {
+            return null;
+        }
+
+        uno.setTopCard(played);
+        System.out.println("Neue Top-Karte: " + played);
+
+        return played;
     }
 
     // Zeigt das Hauptmenü mit den verfügbaren Optionen an.
