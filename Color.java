@@ -1,6 +1,7 @@
 public enum Color {
     RED, BLUE, GREEN, YELLOW, BLACK;
 
+    // toString-Methode zum Ausgeben der Karten
     @Override
     public String toString() {
         switch (this) {
@@ -9,7 +10,7 @@ public enum Color {
             case GREEN:  return "Green";
             case YELLOW: return "Yellow";
             case BLACK:  return "Black";
-            default:     return name(); // Fallback
+            default:     return name();
         }
     }
 }

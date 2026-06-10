@@ -1,39 +1,33 @@
 import java.util.Scanner;
 
+// Stellt das Hauptmenü des UNO-Spiels bereit und verwaltet die Benutzerinteraktion
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
-
     private static final String RESET = "\u001B[0m";
     private static final String YELLOW = "\u001B[33m";
+    private final Player player;
+    private final Game uno;
 
-    private Player player;
-    private Game uno;
-    private Help help;
-
-    // Konstruktor → sauberer OOP Ansatz
+    // Konstruktor
     public Menu(Game uno, Player player, Help help) {
         this.uno = uno;
         this.player = player;
-        this.help = help;
     }
 
+    // Führt die Hauptmenüschleife aus: Zeigt Optionen an und verarbeitet die Benutzereingabe
+    // Behandelt ungültige Eingaben und delegiert an die entsprechenden Methoden
     public void runMenu() {
-
         // Sicherheitscheck (verhindert Nullpointer)
         if (uno == null || player == null) {
             System.out.println("Fehler: Spiel nicht korrekt initialisiert!");
             return;
         }
-
         player.showCards();
-
         showMenu();
-
         System.out.print(YELLOW + "Gib deine Wahl ein (1-4): " + RESET);
 
         int input;
-
         try {
             input = scanner.nextInt();
         } catch (Exception e) {
@@ -41,38 +35,30 @@ public class Menu {
             scanner.nextLine(); // Buffer reset
             return;
         }
-
         scanner.nextLine(); // Buffer sauber halten
-
         switch (input) {
-
             case 1:
                 playTurn();
                 break;
-
             case 2:
                 // Datenbankverbindung oeffnen und Endergebnisse anzeigen
                 GameDatabase db = new GameDatabase();
                 db.displayFinalResults();
                 break;
-
             case 3:
                 Help.showRulesInFile();
                 break;
-
             case 4:
                 if (isExit()) System.exit(0);
                 break;
-
             default:
                 System.out.println("Ungültige Auswahl (1-4)");
         }
     }
 
+    // Führt einen Spielzug aus: Der Spieler wählt eine Karte, die auf die oberste Karte gelegt wird
     private void playTurn() {
-
         Card topCard = uno.getTopCard();
-
         Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
 
         if (played != null) {
@@ -81,29 +67,29 @@ public class Menu {
         }
     }
 
-        public void showMenu() {
-            System.out.println();
-            System.out.printf(YELLOW + """
+    // Zeigt das Hauptmenü mit den verfügbaren Optionen an.
+    public void showMenu() {
+        System.out.println();
+        System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
                 2 - Endergebnisse anzeigen
                 3 - Hilfe
-                4 - Spiel beenden\n""" + RESET);
-        }
+                4 - Spiel beenden""" + RESET);
+    }
 
-        public boolean isExit() {
-            while (true) {
-                System.out.print(YELLOW + "Willst du das Spiel wirklich beenden? (j/n) " + RESET);
-                String inputExit = scanner.next();
-                if (inputExit.equals("n")) {
-                    return false;
-                } else if (inputExit.equals("j")) {
-                    return true;
-                } else {
-                    System.out.println(YELLOW + "Ungültige Eingabe, bitte j/n eingeben: " + RESET);
-                    continue;
-                }
+    // Fordert den Benutzer zur Bestätigung des Spielabbruchs auf
+    public boolean isExit() {
+        while (true) {
+            System.out.print(YELLOW + "Willst du das Spiel wirklich beenden? (j/n) " + RESET);
+            String inputExit = scanner.next();
+            if (inputExit.equals("n")) {
+                return false;
+            } else if (inputExit.equals("j")) {
+                return true;
+            } else {
+                System.out.println(YELLOW + "Ungültige Eingabe, bitte j/n eingeben: " + RESET);
             }
         }
-
+    }
 }
