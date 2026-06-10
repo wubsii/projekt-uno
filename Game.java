@@ -14,15 +14,6 @@ public class Game {
     // Spielrichtung (1 = normal, -1 = rückwärts)
     private static int direction = 1;
 
-    private static Menu menu;
-    private static Help help;
-
-    // (nicht wirklich genutzt, wirkt wie Überbleibsel)
-    ArrayList<Card> hand = new ArrayList<>();
-
-    // letzte gespielte Karte (für Spiellogik / Erweiterungen)
-    private Card lastPlayedCard;
-
     // Konstruktor: verbindet Deck mit Ablagestapel
     public Game(DiscardPile discardPile) {
         this.discardPile = discardPile;
@@ -210,12 +201,10 @@ public class Game {
 
     // komplette Runde spielen
     private static Player playRound(Game uno, Player[] playerListe) {
-
         // zufälliger Startspieler
         int start = playerListe[0].randomizePlayer();
 
         while (true) {
-
             Player current = playerListe[start];
 
             // Menü anzeigen + Spielzug durchführen
@@ -345,7 +334,7 @@ public class Game {
                 shuffle();
             }
 
-            newHand.add(deck.remove(0));
+            newHand.add(deck.removeFirst());
         }
 
         return newHand;
@@ -361,7 +350,7 @@ public class Game {
             shuffle();
         }
 
-        player.getHand().add(deck.remove(0));
+        player.getHand().add(deck.removeFirst());
     }
 
     // oberste Karte setzen
@@ -385,7 +374,7 @@ public class Game {
                 shuffle();
             }
 
-            topCard = deck.remove(0);
+            topCard = deck.removeFirst();
 
         } while (topCard.color == Color.BLACK);
 
