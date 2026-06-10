@@ -56,15 +56,22 @@ public class Menu {
         }
     }
 
-    // Führt einen Spielzug aus: Der Spieler wählt eine Karte, die auf die oberste Karte gelegt wird
-    private void playTurn() {
+    // Führt einen Spielzug aus und gibt die gespielte Karte zurück
+    public Card playTurn() {
         Card topCard = uno.getTopCard();
+        // Spieler wählt eine Karte aus
         Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
 
-        if (played != null) {
-            uno.setTopCard(played);
-            System.out.println("Neue Top-Karte: " + played);
+        // falls keine Karte gespielt wurde
+        if (played == null) {
+            return null;
         }
+
+        // Karte auf Ablagestapel setzen
+        uno.setTopCard(played);
+        System.out.println("Neue Top-Karte: " + played);
+
+        return played;
     }
 
     // Zeigt das Hauptmenü mit den verfügbaren Optionen an.
