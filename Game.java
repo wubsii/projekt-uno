@@ -88,7 +88,7 @@ public class Game {
 
                 Player aktuellerPlayer = playerListe[start];
 
-                Menu menu = new Menu(uno, aktuellerPlayer, help);
+                Menu menu = new Menu(uno, aktuellerPlayer);
                 menu.runMenu();
 
                 // Pruefen ob der aktuelle Spieler die Runde gewonnen hat
@@ -213,29 +213,29 @@ public class Game {
 //        }
 //    }
 
-        public ArrayList<Card> dealInitialHand(int anzahl) {
-            ArrayList<Card> newHand = new ArrayList<>();
-            for (int i = 0; i < anzahl; i++) {
-                if (deck.isEmpty()) {
-                    List<Card> recycled = discardPile.takeAllExceptTop();
-                    deck.addAll(recycled);
-                    shuffle();
-                }
-                newHand.add(deck.remove(0));
+    public ArrayList<Card> dealInitialHand(int anzahl) {
+        ArrayList<Card> newHand = new ArrayList<>();
+        for (int i = 0; i < anzahl; i++) {
+            if (deck.isEmpty()) {
+                List<Card> recycled = discardPile.takeAllExceptTop();
+                deck.addAll(recycled);
+                shuffle();
             }
-            return newHand;
+            newHand.add(deck.remove(0));
         }
-
-
-public void drawOneCard(Player player) {
-    if (deck.size() < 4) {
-        List<Card> recycled = discardPile.takeAllExceptTop();
-        deck.addAll(recycled);
-        shuffle();
+        return newHand;
     }
-    // Add the card to the player's hand
-    player.getHand().add(deck.remove(0));
-}
+
+
+    public void drawOneCard(Player player) {
+        if (deck.size() < 4) {
+            List<Card> recycled = discardPile.takeAllExceptTop();
+            deck.addAll(recycled);
+            shuffle();
+        }
+        // Add the card to the player's hand
+        player.getHand().add(deck.remove(0));
+    }
 
     public void setTopCard(Card card) {
         this.topCard = card;
