@@ -68,17 +68,26 @@ public class Game {
             uno.getStartercard();
             Card startCard = uno.getTopCard();
 
+            // Startkarte auswerten und Spezialeffekte anwenden
             switch (startCard.value) {
+
                 case PLUS_TWO:
+                    // Startspieler muss 2 Karten ziehen
                     System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
+
                     uno.drawOneCard(playerListe[start]);
                     uno.drawOneCard(playerListe[start]);
                     break;
+
                 case SKIP:
+                    // Startspieler wird übersprungen → nächster Spieler ist dran
                     System.out.println(playerListe[start].getName() + " wird übersprungen!");
+
                     start = (start + 1) % 4;
                     break;
+
                 case REVERSE:
+                    // Spielrichtung wird umgedreht
                     direction *= -1;
                     break;
             }
@@ -142,45 +151,71 @@ public class Game {
 
                 Card topCard = uno.getTopCard();
 
+                // Falls eine Farbwechsel-Karte oder +4 Karte gespielt wurde, muss der Spieler eine neue Farbe auswählen
                 if (topCard.value == Value.COLOR_CHANGE || topCard.value == Value.PLUS_FOUR) {
                     char chosenColor = cardValue(topCard);
+
+                    // gewählte Farbe wird auf der Karte gespeichert
                     topCard.setChosenColor(chosenColor);
+
                     System.out.println("Neue Farbe ist: " + colorName(chosenColor));
                 }
 
                 switch (topCard.value) {
+
                     case REVERSE:
+                        // Richtungswechsel: Spielrichtung wird umgedreht
                         System.out.println("Richtung geändert!");
                         direction *= -1;
+
+                        // nächster Spieler nach Richtungswechsel berechnen
                         start = (start + direction + 4) % 4;
                         break;
+
                     case SKIP:
+                        // aktueller Spieler wird übersprungen (2x weitergehen)
                         System.out.println("Spieler wird übersprungen!");
+
                         start = (start + direction + 4) % 4;
                         start = (start + direction + 4) % 4;
                         break;
+
                     case PLUS_TWO:
+                        // nächster Spieler muss 2 Karten ziehen
                         start = (start + direction + 4) % 4;
+
                         System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
+
                         uno.drawOneCard(playerListe[start]);
                         uno.drawOneCard(playerListe[start]);
+
+                        // nach Strafkarten weiter zum nächsten Spieler
                         start = (start + direction + 4) % 4;
                         break;
+
                     case PLUS_FOUR:
+                        // nächster Spieler muss 4 Karten ziehen
                         start = (start + direction + 4) % 4;
+
                         System.out.println(playerListe[start].getName() + " zieht 4 Karten!");
+
                         for (int i = 0; i < 4; i++) {
                             uno.drawOneCard(playerListe[start]);
                         }
+
+                        // nach Strafkarten weiter zum nächsten Spieler
                         start = (start + direction + 4) % 4;
                         break;
+
                     default:
+                        // normale Karte: einfach zum nächsten Spieler wechseln
                         start = (start + direction + 4) % 4;
                 }
             }
         }
     }
 
+    // Als Test, ob alle Karten angezeigt werden
     public void displayCards() {
         for (Card i : deck) {
             System.out.println(i);
@@ -213,61 +248,104 @@ public class Game {
 //        }
 //    }
 
-        public ArrayList<Card> dealInitialHand(int anzahl) {
-            ArrayList<Card> newHand = new ArrayList<>();
-            for (int i = 0; i < anzahl; i++) {
-                if (deck.isEmpty()) {
-                    List<Card> recycled = discardPile.takeAllExceptTop();
-                    deck.addAll(recycled);
-                    shuffle();
-                }
-                newHand.add(deck.remove(0));
+    // Gibt einem Spieler zu Beginn eine feste Anzahl Karten
+    public ArrayList<Card> dealInitialHand(int anzahl) {
+
+        // Neue Hand für den Spieler erstellen
+        ArrayList<Card> newHand = new ArrayList<>();
+
+        // so viele Karten ziehen wie angegeben
+        for (int i = 0; i < anzahl; i++) {
+
+            // falls der Nachziehstapel leer ist → Ablagestapel recyceln
+            if (deck.isEmpty()) {
+
+                // alle Karten außer der obersten zurückholen
+                List<Card> recycled = discardPile.takeAllExceptTop();
+
+                // zurück ins Deck legen
+                deck.addAll(recycled);
+
+                // Deck neu mischen
+                shuffle();
             }
-            return newHand;
+
+            // oberste Karte vom Deck nehmen und in die Hand geben
+            newHand.add(deck.remove(0));
         }
 
-
-public void drawOneCard(Player player) {
-    if (deck.size() < 4) {
-        List<Card> recycled = discardPile.takeAllExceptTop();
-        deck.addAll(recycled);
-        shuffle();
+        // fertige Hand zurückgeben
+        return newHand;
     }
-    // Add the card to the player's hand
-    player.getHand().add(deck.remove(0));
-}
 
+
+    // Spieler zieht genau eine Karte vom Deck
+    public void drawOneCard(Player player) {
+
+        // wenn nur noch wenige Karten im Deck sind → auffüllen
+        if (deck.size() < 4) {
+
+            // Karten vom Ablagestapel zurückholen
+            List<Card> recycled = discardPile.takeAllExceptTop();
+
+            // ins Deck mischen
+            deck.addAll(recycled);
+
+            // neu mischen
+            shuffle();
+        }
+
+        // oberste Karte ziehen und dem Spieler geben
+        player.getHand().add(deck.remove(0));
+    }
+
+
+    // setzt die oberste Karte im Spiel (Ablagestapel-Top)
     public void setTopCard(Card card) {
         this.topCard = card;
     }
 
+
+    // gibt die aktuelle oberste Karte zurück
     public Card getTopCard() {
         return topCard;
     }
 
+
+    // zieht die Startkarte für das Spiel
     public Card getStartercard() {
+
         do {
+            // wenn Deck leer ist → Karten recyceln
             if (deck.isEmpty()) {
+
                 List<Card> recycled = discardPile.takeAllExceptTop();
                 deck.addAll(recycled);
                 shuffle();
             }
+
+            // oberste Karte ziehen
             topCard = deck.remove(0);
+
+            // solange ziehen bis keine BLACK Karte kommt
         } while (topCard.color == Color.BLACK);
 
-        discardPile.addCard(topCard); // Add the starter card to the discard pile
+        // Startkarte auf Ablagestapel legen
+        discardPile.addCard(topCard);
+
         System.out.println("Startkarte ist: " + topCard);
+
         return topCard;
     }
 
 
+    // bestimmt Farbe oder Effekt einer Spezialkarte
     public static char cardValue(Card topCard) {
 
         Scanner input = new Scanner(System.in);
-
         switch (topCard.value) {
 
-            // Meldung machen für die anderen Spieler, damit die wissen mit welcher Farbe es weiter geht
+            // Farbwechsel-Karte: Spieler wählt neue Farbe
             case COLOR_CHANGE:
 
                 System.out.println("""
@@ -280,9 +358,11 @@ public void drawOneCard(Player player) {
 
                 return input.next().toLowerCase().charAt(0);
 
+            // +4 Karte: Farbe wählen + Strafeffekt
             case PLUS_FOUR:
 
                 System.out.println("+4 Karten!");
+
                 System.out.println("""
                         Welche Farbe wünschst du dir?
                         r = Rot
@@ -292,35 +372,42 @@ public void drawOneCard(Player player) {
                         """);
 
                 return input.next().toLowerCase().charAt(0);
+
+            // +2 Karte: einfache Strafkarte
             case PLUS_TWO:
 
                 System.out.println("+2 Karten!");
-
                 return 'T';
 
+            // Richtungswechsel
             case REVERSE:
-                System.out.println("Richtungswechsel!");
 
+                System.out.println("Richtungswechsel!");
                 return 'R';
 
+            // Spieler überspringen
             case SKIP:
 
                 System.out.println("Spieler wird übersprungen!");
-
                 return 'S';
 
+            // Standardfall (keine Spezialkarte)
             default:
-
                 return '0';
         }
     }
 
+
+    // wandelt Farbcode in lesbaren Namen um
     private static String colorName(char color) {
         return switch (color) {
+
             case 'r' -> "Rot";
             case 'g' -> "Grün";
             case 'b' -> "Blau";
             case 'y' -> "Gelb";
+
+            // falls unbekannter Wert kommt
             default -> "Unbekannt";
         };
     }
