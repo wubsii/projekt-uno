@@ -4,13 +4,12 @@ public enum Color {
     // toString-Methode zum Ausgeben der Karten
     @Override
     public String toString() {
-        switch (this) {
-            case RED:    return "Red";
-            case BLUE:   return "Blue";
-            case GREEN:  return "Green";
-            case YELLOW: return "Yellow";
-            case BLACK:  return "Black";
-            default:     return name();
-        }
+        return switch (this) {
+            case RED -> "Red";
+            case BLUE -> "Blue";
+            case GREEN -> "Green";
+            case YELLOW -> "Yellow";
+            case BLACK -> "Black";
+        };
     }
 }

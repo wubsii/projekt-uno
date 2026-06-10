@@ -27,7 +27,8 @@ Das Projekt beinhaltet mehrere Klassen:
 - Deck.java --> erstellt das Spieldeck
 - DiscardPile.java --> Zwischenlagerung des Ablagestapels
 - Menu.java --> erstellt das Eingabemenü und kontrolliert dessen Logik
-- Helper.java --> Sammlung von Helper-Methoden
+- Help.java --> erstellt ein .txt-File, wenn ein Spieler Hilfe auswählt
+- GameDatabase.java --> Verwaltung der Punkte und Datenbank
 
 ## <span style="color:blue">Game starten</span>
 
@@ -37,13 +38,18 @@ Das Projekt beinhaltet mehrere Klassen:
 
 ## <span style="color:green">Gruppenaufteilung/Unser Team</span>
 
-- Arnela: Anforderungen, Datenbank und Punkteverwaltung
-- Magdalena: Spielerinteraktionen, Spielablauf
+- Arnela: Anforderungen, Datenbank und Punkteverwaltung, Testung
+- Magdalena: Spielerinteraktionen, Spielablauf, Präsentation
 - Stefanie: Karten- und Deckerstellung, Menü inkl. Hilfe, ReadMe
 
 ## <span style="color:red">Verbesserungsvorschläge</span>
 
-//was wir noch verbessern können
+- bessere Organisationsstruktur von Anfang an
+- schönere/deutlichere Darstellung der Spielkarten
+- Unit-Tests von Anfang an
+- Konzepte der OOP (Vererbung, Interfaces etc.) mehr nutzen
+- bessere Übersichtlichkeit durch mehr Klassen herstellen
+- Methoden klarer aufteilen und kürzen
 
 ## <span style="color:yellow">Gameflow</span>
 
