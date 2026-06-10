@@ -7,30 +7,21 @@ import java.util.regex.Pattern;
 
 public class Player {
 
+    // Stellt einen Spieler im UNO-Spiel dar.
+    // Verwaltet Name, Handkarten und Spielaktionen wie Karten ausspielen oder UNO rufen.
     Scanner input = new Scanner(System.in);
     String name;
-    private DiscardPile discardPile;
+    private final DiscardPile discardPile;
     ArrayList<Card> hand = new ArrayList<>();
-    //Player[] playerListe = new Player[4];
-    private Game game;
+    private final Game game;
 
+    // Konstruktor
     public Player(Game game, DiscardPile discardPile) {
         this.game = game;
         this.discardPile = discardPile;
     }
 
-    public Player(DiscardPile discardPile) {
-        this.discardPile = discardPile;
-    }
-
-    /*
-Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
-• Leerer Name: Gibt der Nutzer keinen Namen ein, wird er erneut zur Eingabe aufgefordert.
-• Ungültige Zeichen: Enthält der Name Zahlen oder Sonderzeichen, wird er als ungültig betrachtet und der Nutzer wird erneut zur Eingabe aufgefordert.
-• Doppelter Name: Ist der eingegebene Name bereits einem anderen Spieler zugewiesen, wird der Nutzer darauf hingewiesen und muss einen anderen Namen eingeben.
-Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeigt werden.
-*/
-
+    // Fordert den Spielernamen an und validiert ihn.
     public String gettingName(List<String> vorhandeneNamen) {
         while (true) {
             System.out.print("Wie heißt der Spieler? ");
@@ -41,28 +32,24 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
                 System.out.println("Der Name darf nicht leer sein.");
                 continue;
             }
-
             // Prüfen auf ungültige Zeichen
             // Erlaubt nur Buchstaben und Leerzeichen
             if (!eingabe.matches("[a-zA-ZäöüÄÖÜß ]+")) {
                 System.out.println("Der Name enthält ungültige Zeichen.");
                 continue;
             }
-
             // Prüfen auf doppelte Namen
             if (vorhandeneNamen.contains(eingabe)) {
                 System.out.println("Dieser Name ist bereits vergeben.");
                 continue;
             }
-
             // Name gültig
             this.name = eingabe;
             return this.name;
         }
     }
 
-
-    // Zum zeigen wie die Spieler heißen
+    // Testmethode: Gibt alle Spielernamen aus.
     public void showNames(String[] playerName) {
         // Namen ausgeben
         System.out.println("Spieler: ");
@@ -71,51 +58,23 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-//    public void createPlayers() {
-//
-//        List<String> vorhandeneNamen = new ArrayList<>();
-//
-//        // Spieler erstellen
-//        for (int i = 0; i < 4; i++) {
-//            playerListe[i] = new Player(discardPile);
-//            String name = playerListe[i].gettingName(vorhandeneNamen);
-//            playerListe[i].setName(name);
-//            vorhandeneNamen.add(name);
-//        }
-//    }
-
+    // Testmethode: Gibt die Spielerreihenfolge ab einem Startindex zurück.
     public String[] showOrder(String[] playerName, int start) {
         String[] neueReihenfolge = new String[4];
         for (int i = 0; i < 4; i++) {
             neueReihenfolge[i] = playerName[(start + i) % 4];
         }
-        // Ausgabe Reihenfolge
-//        System.out.println("Reihenfolge: ");
-//        for (String name : neueReihenfolge) {
-//            System.out.println(name);
-//        }
         return neueReihenfolge;
     }
 
+    // Gibt einen zufälligen Spielerindex zurück.
     public int randomizePlayer() {
         // generieren eines random index
         Random rand = new Random();
         return rand.nextInt(4);
     }
 
-
-    public ArrayList<Card> playerHand(Game uno) {
-        hand = uno.dealInitialHand(7);
-        System.out.println("Du (" + name + ") hast folgende Karten:");
-        for (Card c : hand) {
-            System.out.println(c + " ");
-        }
-
-
-        return hand;
-    }
-
-
+    // Zeigt die Handkarten des Spielers nach Bestätigung an.
     public void showCards() {
         System.out.println(name + " ist jetzt an der Reihe");
         System.out.print("Bitte bestätigen (j/n), damit nur du die Karten siehst: ");
@@ -134,8 +93,9 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
-    public boolean hasPlayableCard(Card topCard){
-       // Card topCard = discardPile.getTopCard();
+    // Prüft, ob der Spieler eine spielbare Karte auf die oberste Karte hat.
+    public boolean hasPlayableCard(Card topCard) {
+        // Card topCard = discardPile.getTopCard();
         for (Card card : hand) {
             if (isValidMove(card, topCard)) {
                 return true;
@@ -144,68 +104,88 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         return false;
     }
 
-
+    // Fordert den Spieler zur Auswahl einer Karte auf und spielt diese.
     public Card whichCardWouldYouLikeToPlay(Card topCard, Game game) {
+        displayHand();
 
-        // Karten anzeigen
-        // System.out.println(hand);
-        // System.out.println("HAND SIZE: " + hand.size());
-            for (int i = 0; i < hand.size(); i++) {
-                System.out.println((i + 1) + ": " + hand.get(i));
-            }
-
-        // NOCH NICHT FERTIG: Spieler hat keine spielbare Karte
         if (!hasPlayableCard(topCard)) {
-            game.drawOneCard(this); // Pass the current player
-            System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
+            handleNoPlayableCard(topCard, game);
             if (!hasPlayableCard(topCard)) {
-                System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
                 return null;
-            } else {
-                System.out.println("Deine Karten nach dem Ziehen:");
-                for (int i = 0; i < hand.size(); i++) {
-                    System.out.println((i + 1) + ": " + hand.get(i));
-                }
             }
+            displayHand();
         }
 
-        System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
-        String choice = input.next().toLowerCase();
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(choice);
-        int choiceNumber = 0;
-        if (matcher.find()) {
-            String numberStr = matcher.group();
-            choiceNumber = Integer.parseInt(numberStr);
-            System.out.println(choiceNumber);
-        }
-
-        input.nextLine(); // Buffer leeren
-
-        // prüfen ob Auswahl gültig ist
-        if (choiceNumber < 1 || choiceNumber > hand.size()) {
-            System.out.println("Ungültige Auswahl!");
+        int choiceNumber = getCardChoiceFromUser();
+        if (choiceNumber == -1) {
             return null;
         }
 
         Card selectedCard = hand.get(choiceNumber - 1);
-
-        // prüfen ob Karte spielbar ist
-        if (isValidMove(selectedCard, topCard)) {
-            hand.remove(choiceNumber - 1);
-            System.out.println("Du hast gespielt: " + selectedCard);
-            declareUNO(choice);
-            discardPile.addCard(selectedCard); // Karte zum Ablegestapel hinzufügen
-            return selectedCard;
-        } else {
-
-                System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte:");
-                game.drawOneCard(this); // Pass the current player
-                return null;
-            }
-
+        if (!isValidMove(selectedCard, topCard)) {
+            handleInvalidMove(game);
+            return null;
         }
 
+        playCard(selectedCard, choiceNumber);
+        return selectedCard;
+    }
+
+    // Zeigt die Handkarten mit Nummern zur Auswahl an.
+    private void displayHand() {
+        System.out.println("Deine Karten:");
+        for (int i = 0; i < hand.size(); i++) {
+            System.out.print((i + 1) + ": " + hand.get(i) + " ");
+        }
+        System.out.println();
+    }
+
+    // Behandelt den Fall, dass der Spieler keine spielbare Karte hat.
+    private void handleNoPlayableCard(Card topCard, Game game) {
+        System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
+        game.drawOneCard(this);
+        if (!hasPlayableCard(topCard)) {
+            System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
+        } else {
+            System.out.println("Deine Karten nach dem Ziehen:");
+        }
+    }
+
+    // Fordert die Kartenauswahl vom Benutzer an und validiert sie.
+    private int getCardChoiceFromUser() {
+        System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
+        String choice = input.next().toLowerCase();
+        input.nextLine(); // Buffer leeren
+
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(choice);
+        if (matcher.find()) {
+            int choiceNumber = Integer.parseInt(matcher.group());
+            if (choiceNumber < 1 || choiceNumber > hand.size()) {
+                System.out.println("Ungültige Auswahl!");
+                return -1;
+            }
+            return choiceNumber;
+        }
+        System.out.println("Ungültige Eingabe!");
+        return -1;
+    }
+
+    // Behandelt einen ungültigen Zug durch Ziehen einer Strafkarte.
+    private void handleInvalidMove(Game game) {
+        System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte:");
+        game.drawOneCard(this);
+    }
+
+    // Entfernt die ausgewählte Karte aus der Hand und fügt sie dem Ablegestapel hinzu.
+    private void playCard(Card selectedCard, int choiceNumber) {
+        hand.remove(choiceNumber - 1);
+        System.out.println("Du hast gespielt: " + selectedCard);
+        declareUNO(String.valueOf(choiceNumber));
+        discardPile.addCard(selectedCard);
+    }
+
+    // Prüft und behandelt "UNO", falls der Spieler nur eine Karte hat.
     public void declareUNO(String input) {
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
@@ -215,57 +195,52 @@ Die Namen der Spieler können zu jedem Zeitpunkt im Spiel abgerufen und angezeig
         }
     }
 
+    // Prüft, ob eine Karte auf die oberste Karte gespielt werden darf.
     public boolean isValidMove(Card playedCard, Card topCard) {
 
         //Abfrage ob die Karte die man drauflegt die gleiche Farbe hat
         if (playedCard.color == topCard.color) {
             return true;
         }
-
         if (topCard.color == Color.BLACK &&
                 topCard.getChosenColor() != '\0') {
 
             switch (topCard.getChosenColor()) {
-
                 case 'r':
                     return playedCard.color == Color.RED;
-
                 case 'g':
                     return playedCard.color == Color.GREEN;
-
                 case 'b':
                     return playedCard.color == Color.BLUE;
-
                 case 'y':
                     return playedCard.color == Color.YELLOW;
             }
         }
 
-        // Abfrage ob die Karte die man drauflegt den gleicher Wert hat
+        // Abfrage, ob die Karte die man drauflegt den gleichen Wert hat
         if (playedCard.value == topCard.value) {
             return true;
         }
 
-        // Abfrage ob die Karte die man drauflegt eine schwarze Karte (Joker) ist
-        if (playedCard.color == Color.BLACK) {
-            return true;
-        }
-
-        return false;
+        // Abfrage, ob die Karte die man drauflegt eine schwarze Karte (Joker) ist
+        return playedCard.color == Color.BLACK;
     }
 
+    // Setter-Methoden
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
+    // Getter-Methoden
     public String getName() {
         return name;
     }
 
     public ArrayList<Card> getHand() {
         return hand;
-    }}
+    }
+}
