@@ -187,7 +187,7 @@ public class Player {
         discardPile.addCard(selectedCard);
     }
 
-    // Prüft und behandelt "UNO", falls der Spieler nur eine Karte hat.
+    // Prüft und behandelt UNO, falls der Spieler nur eine Karte hat.
     public void declareUNO(String input) {
         if (hand.size() == 1 && input.contains("uno")) {
             System.out.println("UNO!");
