@@ -220,6 +220,7 @@ public class Game {
 
             // Menü anzeigen + Spielzug durchführen
             Menu menu = new Menu(uno, current);
+            menu.runMenu();
             Card played = menu.playTurn();
 
             // falls keine Karte gespielt wurde
