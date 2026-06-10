@@ -19,7 +19,11 @@ public class Player {
         this.discardPile = discardPile;
     }
 
-  /*
+    public Player(DiscardPile discardPile) {
+        this.discardPile = discardPile;
+    }
+
+    /*
 Beim Erstellen eines Spielers wird der eingegebene Name auf folgende Punkte geprüft:
 • Leerer Name: Gibt der Nutzer keinen Namen ein, wird er erneut zur Eingabe aufgefordert.
 • Ungültige Zeichen: Enthält der Name Zahlen oder Sonderzeichen, wird er als ungültig betrachtet und der Nutzer wird erneut zur Eingabe aufgefordert.

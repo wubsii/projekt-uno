@@ -90,4 +90,15 @@ public class GameDatabase {
             System.out.println("Fehler beim Laden: " + e.getMessage());
         }
     }
+
+    // Alle Eintraege aus der Tabelle loeschen
+    // Wird zu Beginn jeder neuen Runde aufgerufen
+    public void resetScores() {
+        try {
+            client.executeStatement("DELETE FROM " + TABLE + ";");
+            System.out.println("Punktestand zurueckgesetzt.");
+        } catch (SQLException e) {
+            System.out.println("Fehler beim Zuruecksetzen: " + e.getMessage());
+        }
+    }
 }
