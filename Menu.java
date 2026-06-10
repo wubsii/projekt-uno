@@ -73,7 +73,7 @@ public class Menu {
         System.out.printf(YELLOW + """
                 Menü:
                 1 - Spielzug
-                2 - Endergebnisse anzeigen
+                2 - Punktestand anzeigen
                 3 - Hilfe
                 4 - Spiel beenden""" + RESET);
     }

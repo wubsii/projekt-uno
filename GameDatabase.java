@@ -80,7 +80,7 @@ public class GameDatabase {
         try {
             ArrayList<HashMap<String, String>> results = client.executeQuery(SELECT_ALL);
 
-            System.out.println("=== Endergebnis ===");
+            System.out.println("=== Punktestand ===");
             for (HashMap<String, String> row : results) {
                 System.out.println(
                         row.get("player_name") + ": " + row.get("final_score") + " Punkte"

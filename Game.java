@@ -23,118 +23,160 @@ public class Game {
         uno.shuffle();
 
         Player[] playerListe = new Player[4];
-
         List<String> existingNames = new ArrayList<>();
 
+        // Spielernamen einmalig zu Beginn eingeben
         for (int i = 0; i < 4; i++) {
-
             playerListe[i] = new Player(uno, discardPile);
             String name = playerListe[i].gettingName(existingNames);
             playerListe[i].setName(name);
             existingNames.add(name);
         }
 
-        // Karten verteilen
-        for (int i = 0; i < 4; i++) {
-            playerListe[i].setHand(uno.dealInitialHand(7));
+        // Datenbankverbindung oeffnen und Tabelle erstellen falls noetig
+        GameDatabase db = new GameDatabase();
+
+        // Punktestand zuruecksetzen – wird bei jedem neuen Spielstart aufgerufen
+        db.resetScores();
+
+        // Gesamtpunktestand aller Spieler (Name → Punkte)
+        Map<String, Integer> totalScores = new HashMap<>();
+        for (Player player : playerListe) {
+            totalScores.put(player.getName(), 0);
         }
 
-        // Startspieler
-        int start = playerListe[0].randomizePlayer();
+        int roundNumber = 1;
 
-        // Startkarte
-        uno.getStartercard();
-        Card startCard = uno.getTopCard();
-
-        switch (startCard.value) {
-
-            case PLUS_TWO:
-                System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
-                uno.drawOneCard(playerListe[start]);
-                uno.drawOneCard(playerListe[start]);
-                break;
-
-            case SKIP:
-                System.out.println(playerListe[start].getName() + " wird übersprungen!");
-                start = (start + 1) % 4;
-
-                break;
-
-            case REVERSE:
-
-                direction *= -1;
-
-                break;
-        }
-
+        // Aeussere Schleife – laeuft bis jemand 500 Punkte hat
         while (true) {
 
-            Player aktuellerPlayer = playerListe[start];
+            System.out.println("\n=== Runde " + roundNumber + " beginnt! ===");
 
-            Menu menu = new Menu(uno, aktuellerPlayer, help);
-            menu.runMenu();
+            // Neues Deck erstellen und mischen
+            uno.deck = Deck.makeDeck();
+            uno.shuffle();
 
-            if (aktuellerPlayer.getHand().isEmpty()) {
-                System.out.println(aktuellerPlayer.getName() + " hat das Spiel gewonnen!");
-                GameDatabase db = new GameDatabase();
-
-                // Endpunktestand jedes Spielers in der Datenbank speichern
-                for (Player player : playerListe) {
-                    int score = 0;
-                    for (Card card : player.getHand()) {
-                        score += card.getPointValue();
-                    }
-                    db.saveFinalScore(player.getName(), score);
-                }
-
-                // Alle gespeicherten Endergebnisse in der Konsole anzeigen
-                db.displayFinalResults();
-
-                break;
+            // Karten verteilen
+            for (int i = 0; i < 4; i++) {
+                playerListe[i].setHand(uno.dealInitialHand(7));
             }
 
-            Card topCard = uno.getTopCard();
+            // Startspieler zufaellig bestimmen
+            int start = playerListe[0].randomizePlayer();
 
-            if (topCard.value == Value.COLOR_CHANGE || topCard.value == Value.PLUS_FOUR) {
-                char chosenColor = cardValue(topCard);
-                topCard.setChosenColor(chosenColor);
+            // Startkarte ziehen
+            uno.getStartercard();
+            Card startCard = uno.getTopCard();
 
-                System.out.println("Neue Farbe ist: " + colorName(chosenColor));
-            }
-
-            switch (topCard.value) {
-
-                case REVERSE:
-                    System.out.println("Richtung geändert!");
-                    direction *= -1;
-                    start = (start + direction + 4) % 4;
-                    break;
-
-                case SKIP:
-                    System.out.println("Spieler wird übersprungen!");
-                    start = (start + direction + 4) % 4;
-                    start = (start + direction + 4) % 4;
-                    break;
-
+            switch (startCard.value) {
                 case PLUS_TWO:
-                    start = (start + direction + 4) % 4;
                     System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
                     uno.drawOneCard(playerListe[start]);
                     uno.drawOneCard(playerListe[start]);
-                    start = (start + direction + 4) % 4;
                     break;
+                case SKIP:
+                    System.out.println(playerListe[start].getName() + " wird übersprungen!");
+                    start = (start + 1) % 4;
+                    break;
+                case REVERSE:
+                    direction *= -1;
+                    break;
+            }
 
-                case PLUS_FOUR:
-                    start = (start + direction + 4) % 4;
-                    System.out.println(playerListe[start].getName() + " zieht 4 Karten!");
-                    for (int i = 0; i < 4; i++) {
-                        uno.drawOneCard(playerListe[start]);
+            // Innere Schleife – eine Runde spielen
+            while (true) {
+
+                Player aktuellerPlayer = playerListe[start];
+
+                Menu menu = new Menu(uno, aktuellerPlayer, help);
+                menu.runMenu();
+
+                // Pruefen ob der aktuelle Spieler die Runde gewonnen hat
+                if (aktuellerPlayer.getHand().isEmpty()) {
+
+                    // Rundensieger ausgeben
+                    System.out.println("\n" + aktuellerPlayer.getName()
+                            + " hat die Runde gewonnen!");
+
+                    // Punkte der Verlierer berechnen und dem Sieger gutschreiben
+                    int roundPoints = 0;
+                    for (Player player : playerListe) {
+                        if (!player.equals(aktuellerPlayer)) {
+                            for (Card card : player.getHand()) {
+                                roundPoints += card.getPointValue();
+                            }
+                        }
                     }
-                    start = (start + direction + 4) % 4;
-                    break;
 
-                default:
-                    start = (start + direction + 4) % 4;
+                    // Gesamtpunktestand des Siegers aktualisieren
+                    int newScore = totalScores.get(aktuellerPlayer.getName()) + roundPoints;
+                    totalScores.put(aktuellerPlayer.getName(), newScore);
+
+                    // Tabelle leeren und aktuelle Punktestaende speichern
+                    db.resetScores();
+                    for (Player player : playerListe) {
+                        db.saveFinalScore(player.getName(), totalScores.get(player.getName()));
+                    }
+
+                    // Punktestand nach der Runde anzeigen
+                    System.out.println("\n=== Punktestand nach Runde " + roundNumber + " ===");
+                    for (Player player : playerListe) {
+                        System.out.println(player.getName() + ": "
+                                + totalScores.get(player.getName()) + " Punkte");
+                    }
+
+                    // Pruefen ob jemand 500 Punkte erreicht hat
+                    if (newScore >= 500) {
+                        System.out.println("\n=== Spielende! " + aktuellerPlayer.getName()
+                                + " hat das Spiel mit " + newScore
+                                + " Punkten gewonnen! ===");
+                        db.displayFinalResults();
+                        return;
+                    }
+
+                    // Naechste Runde ankuendigen
+                    roundNumber++;
+                    System.out.println("\n=== Runde " + roundNumber + " beginnt! ===");
+                    break;
+                }
+
+                Card topCard = uno.getTopCard();
+
+                if (topCard.value == Value.COLOR_CHANGE || topCard.value == Value.PLUS_FOUR) {
+                    char chosenColor = cardValue(topCard);
+                    topCard.setChosenColor(chosenColor);
+                    System.out.println("Neue Farbe ist: " + colorName(chosenColor));
+                }
+
+                switch (topCard.value) {
+                    case REVERSE:
+                        System.out.println("Richtung geändert!");
+                        direction *= -1;
+                        start = (start + direction + 4) % 4;
+                        break;
+                    case SKIP:
+                        System.out.println("Spieler wird übersprungen!");
+                        start = (start + direction + 4) % 4;
+                        start = (start + direction + 4) % 4;
+                        break;
+                    case PLUS_TWO:
+                        start = (start + direction + 4) % 4;
+                        System.out.println(playerListe[start].getName() + " zieht 2 Karten!");
+                        uno.drawOneCard(playerListe[start]);
+                        uno.drawOneCard(playerListe[start]);
+                        start = (start + direction + 4) % 4;
+                        break;
+                    case PLUS_FOUR:
+                        start = (start + direction + 4) % 4;
+                        System.out.println(playerListe[start].getName() + " zieht 4 Karten!");
+                        for (int i = 0; i < 4; i++) {
+                            uno.drawOneCard(playerListe[start]);
+                        }
+                        start = (start + direction + 4) % 4;
+                        break;
+                    default:
+                        start = (start + direction + 4) % 4;
+                }
             }
         }
     }
