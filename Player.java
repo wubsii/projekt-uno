@@ -200,6 +200,11 @@ public class Player {
     // Prüft, ob eine Karte auf die oberste Karte gespielt werden darf.
     public boolean isValidMove(Card playedCard, Card topCard) {
 
+        // Sicherheitscheck: verhindert NullPointerException
+        if (playedCard == null || topCard == null) {
+            return false;
+        }
+
         //Abfrage ob die Karte die man drauflegt die gleiche Farbe hat
         if (playedCard.color == topCard.color) {
             return true;

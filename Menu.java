@@ -58,16 +58,19 @@ public class Menu {
 
     // Führt einen Spielzug aus und gibt die gespielte Karte zurück
     public Card playTurn() {
-        Card topCard = uno.getTopCard();
-        // Spieler wählt eine Karte aus
-        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
 
-        // falls keine Karte gespielt wurde
+        Card topCard = uno.getTopCard();
+
+        // Sicherheitscheck
+        if (topCard == null) {
+            System.out.println("Fehler: Keine Startkarte gesetzt!");
+            return null;
+        }
+        Card played = player.whichCardWouldYouLikeToPlay(topCard, uno);
         if (played == null) {
             return null;
         }
 
-        // Karte auf Ablagestapel setzen
         uno.setTopCard(played);
         System.out.println("Neue Top-Karte: " + played);
 

@@ -141,6 +141,8 @@ public class Game {
         for (Player player : playerListe) {
             player.setHand(uno.dealInitialHand(7));
         }
+
+        uno.getStartercard();
     }
 
     // Startspieler bestimmen
