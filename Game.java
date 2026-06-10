@@ -97,7 +97,7 @@ public class Game {
 
                 Player aktuellerPlayer = playerListe[start];
 
-                Menu menu = new Menu(uno, aktuellerPlayer, help);
+                Menu menu = new Menu(uno, aktuellerPlayer);
                 menu.runMenu();
 
                 // Pruefen ob der aktuelle Spieler die Runde gewonnen hat
