@@ -146,8 +146,8 @@ public class Player {
         System.out.println("Du hast keine spielbare Karte. Es wird eine Karte vom Stapel gezogen.");
         game.drawOneCard(this);
         if (!hasPlayableCard(topCard)) {
-            System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
             displayHand();
+            System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
         } else {
 
         }
