@@ -14,6 +14,7 @@ public class Player {
     private final DiscardPile discardPile;
     ArrayList<Card> hand = new ArrayList<>();
     private final Game game;
+    private String lastUserInput;
 
     // Konstruktor
     public Player(Game game, DiscardPile discardPile) {
@@ -155,11 +156,11 @@ public class Player {
     // Fordert die Kartenauswahl vom Benutzer an und validiert sie.
     private int getCardChoiceFromUser() {
         System.out.print("Welche Karte möchtest du spielen? (Nummer) ");
-        String choice = input.next().toLowerCase();
+        lastUserInput = input.next().toLowerCase().trim();
         input.nextLine(); // Buffer leeren
 
         Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(choice);
+        Matcher matcher = pattern.matcher(lastUserInput);
         if (matcher.find()) {
             int choiceNumber = Integer.parseInt(matcher.group());
             if (choiceNumber < 1 || choiceNumber > hand.size()) {
@@ -183,7 +184,7 @@ public class Player {
     private void playCard(Card selectedCard, int choiceNumber) {
         hand.remove(choiceNumber - 1);
         System.out.println("Du hast gespielt: " + selectedCard);
-        declareUNO(String.valueOf(choiceNumber));
+        declareUNO(lastUserInput);
         discardPile.addCard(selectedCard);
     }
 
