@@ -77,18 +77,39 @@ public class Player {
 
     // Zeigt die Handkarten des Spielers nach Bestätigung an.
     public void showCards() {
+
         System.out.println(name + " ist jetzt an der Reihe");
         System.out.print("Bitte bestätigen (j/n), damit nur du die Karten siehst: ");
 
         char showMe = input.next().charAt(0);
 
         if (showMe == 'j' || showMe == 'J') {
+
             System.out.println("-----------------------------------------------");
+
+            Card topCard = game.getTopCard();
+
+            if (topCard.color == Color.BLACK && topCard.getChosenColor() != '\0') {
+
+                System.out.println(
+                        "Aktuelle Karte: "
+                                + topCard
+                                + " | Gewählte Farbe: "
+                                + getColorName(topCard.getChosenColor()));
+
+            } else {
+
+                System.out.println("Aktuelle Karte: " + topCard);
+            }
+
             System.out.println("Du (" + name + ") hast folgende Karten:");
+
             for (Card c : hand) {
                 System.out.print(c + " ");
             }
+
             System.out.println("\n-----------------------------------------------");
+
         } else {
             System.out.println("Bitte bestätige mit 'j', um fortzufahren.");
         }
@@ -250,5 +271,17 @@ public class Player {
 
     public ArrayList<Card> getHand() {
         return hand;
+    }
+
+    // Wandelt den Farbcode in einen lesbaren Text um
+    private String getColorName(char color) {
+
+        return switch (color) {
+            case 'r' -> "Rot";
+            case 'g' -> "Grün";
+            case 'b' -> "Blau";
+            case 'y' -> "Gelb";
+            default -> "Unbekannt";
+        };
     }
 }

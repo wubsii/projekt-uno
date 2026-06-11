@@ -216,10 +216,12 @@ public class Game {
 
     // komplette Runde spielen
     private static Player playRound(Game uno, Player[] playerListe) {
+
         // zufälliger Startspieler
         int start = playerListe[0].randomizePlayer();
 
         while (true) {
+
             Player current = playerListe[start];
 
             // Menü anzeigen + Spielzug durchführen
@@ -232,7 +234,7 @@ public class Game {
                 continue;
             }
 
-            // gespielte Karte auf Ablagestapel setzen
+            // gespielte Karte als neue oberste Karte setzen
             uno.setTopCard(played);
 
             // Spezialeffekte der Karte ausführen
@@ -240,11 +242,17 @@ public class Game {
 
             // Gewinnerprüfung
             if (current.getHand().isEmpty()) {
+
+                // Rundensieger ausgeben
+                System.out.println("\n=================================");
+                System.out.println(current.getName()
+                        + " hat die Runde gewonnen!");
+                System.out.println("=================================\n");
+
                 return current;
             }
         }
     }
-
     // Punkte einer Runde berechnen
     private static int calculateRoundPoints(
             Player[] playerListe,
@@ -389,13 +397,11 @@ public class Game {
                 shuffle();
             }
 
-            topCard = deck.removeFirst();
+            topCard = deck.remove(0);
 
         } while (topCard.color == Color.BLACK);
 
         discardPile.addCard(topCard);
-
-        System.out.println("Startkarte ist: " + topCard);
 
         return topCard;
     }
@@ -408,13 +414,13 @@ public class Game {
         switch (topCard.value) {
 
             case COLOR_CHANGE:
-
+                showColorOptions();
                 System.out.println("Welche Farbe wünschst du dir?");
                 return input.next().toLowerCase().charAt(0);
 
             case PLUS_FOUR:
-
                 System.out.println("+4 Karten!");
+                showColorOptions();
                 System.out.println("Welche Farbe wünschst du dir?");
                 return input.next().toLowerCase().charAt(0);
 
@@ -433,6 +439,20 @@ public class Game {
             default:
                 return '0';
         }
+    }
+
+    // Zeigt alle verfügbaren Farben für die Farbwahl an
+    private static void showColorOptions() {
+
+        System.out.println("""
+            ==================
+            Verfügbare Farben:
+            r = Rot
+            g = Grün
+            b = Blau
+            y = Gelb
+            ==================
+            """);
     }
 
     // wandelt Farbcode in Text um
