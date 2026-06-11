@@ -19,6 +19,21 @@ public class Game {
         this.discardPile = discardPile;
     }
 
+    // Spieler wird begrüßt und wählt aus, ob die Hilfe angezeigt werden soll
+    // initGame wird gestartet
+    public static void startScreen(){
+        System.out.println("*******Willkommen bei UNO!*******");
+        System.out.println("Willst du die Hilfe sehen? (j/n)");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        if (input.equals("n")){
+            initGame();
+        } else if  (input.equals("j")){
+            Help.showRulesInFile();
+            initGame();
+        }
+    }
+
     // Startet das komplette Spiel
     public static void initGame() {
 

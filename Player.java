@@ -147,9 +147,9 @@ public class Player {
         game.drawOneCard(this);
         if (!hasPlayableCard(topCard)) {
             System.out.println("Deine neue Karte ist nicht spielbar. Der nächste Spieler ist dran.");
-        } else {
-            System.out.println("Deine Karten nach dem Ziehen:");
             displayHand();
+        } else {
+
         }
     }
 
@@ -175,7 +175,7 @@ public class Player {
 
     // Behandelt einen ungültigen Zug durch Ziehen einer Strafkarte.
     private void handleInvalidMove(Game game) {
-        System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte. Deine Karten:");
+        System.out.println("Diese Karte darfst du nicht spielen! Du ziehst eine Strafkarte.");
         game.drawOneCard(this);
         displayHand();
     }
